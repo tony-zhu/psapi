@@ -1,0 +1,12 @@
+
+SOAP_ENCODE="http://schemas.xmlsoap.org/soap/encoding/"
+SOAP_ENVELOPE="http://schemas.xmlsoap.org/soap/envelope/"
+NMTB="http://ogf.org/schema/network/topology/base/20070828/"
+NMTL3="http://ogf.org/schema/network/topology/l3/20070828/"
+NMWG="http://ggf.org/ns/nmwg/base/2.0/"
+NMWGR="http://ggf.org/ns/nmwg/result/2.0/"
+NMWGT="http://ggf.org/ns/nmwg/topology/2.0/"
+OWAMP="http://ggf.org/ns/nmwg/tools/owamp/2.0/"
+PERFSONAR="http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/"
+PSSERVICE="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/"
+SUMMARY="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/summarization/2.0/"

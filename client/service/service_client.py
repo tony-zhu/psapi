@@ -9,10 +9,10 @@ from urlparse import urlparse
 class ServiceClient:
 
     def __init__(self, url, timeout=None):
-    """
-    @param url: the full service url, e.g. "http://host.edu:port/path"
-    @parm timeout: optional timeout period
-    """
+        """
+        @param url: the full service url, e.g. "http://host.edu:port/path"
+        @parm timeout: optional timeout period
+        """
         self.url = url
         p = urlparse(url)
         self.host = p.hostname
@@ -22,7 +22,7 @@ class ServiceClient:
     
     
     def send_query(self, query, timeout=None):
-    """
-    Send query of Query object type.
-    """
+        """
+        Send query of Query object type.
+        """
         pass

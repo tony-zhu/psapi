@@ -7,7 +7,7 @@ Author: Ahmed El-Hassany <ahassany@udel.edu>
 from httplib import HTTPConnection, HTTPSConnection
 import re
 
-from psapi.client import CommunicationClient
+from psapi.client.communication import CommunicationClient
 
 class SOAPClient(CommunicationClient):
     """

@@ -10,3 +10,18 @@ OWAMP="http://ggf.org/ns/nmwg/tools/owamp/2.0/"
 PERFSONAR="http://ggf.org/ns/nmwg/tools/org/perfsonar/1.0/"
 PSSERVICE="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/"
 SUMMARY="http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/summarization/2.0/"
+
+
+# namspaces map to make the generated XML prettier!
+nsmap = {}
+nsmap['SOAP_ENCODE'] = SOAP_ENCODE
+nsmap['SOAP_ENVELOPE'] = SOAP_ENVELOPE
+nsmap['nmtb'] = NMTB
+nsmap['nmtl3'] = NMTL3
+nsmap['nmwg'] = NMWG
+nsmap['nmwgr'] = NMWGR
+nsmap['nmwgt'] = NMWGT
+nsmap['owamp'] = OWAMP
+nsmap['perfsonar'] = PERFSONAR
+nsmap['psservice'] = PSSERVICE
+nsmap['summary'] = SUMMARY

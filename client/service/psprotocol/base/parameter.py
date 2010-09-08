@@ -25,6 +25,7 @@ class Parameter(PsObject):
     
         
     def _check_values(self):
+        
         if isinstance(self.nested, PsObject):
             self.nested = [self.nested]
         elif isinstance(self.nested, list):
@@ -52,8 +53,8 @@ class Parameter(PsObject):
             param = etree.Element('{%s}parameter' % ns.NMWG, nsmap = ns.nsmap)
         
         param.set('name', self.name)
-        if self.value:
-            param.set('value', self.value)
+        if self.value is not None:
+            param.set('value', str(self.value))
             
         if self.nested:
             if isinstance(self.nested, str):
@@ -62,7 +63,7 @@ class Parameter(PsObject):
                 self.nested.serialize(param, tostring=False)
             elif isinstance(self.nested, list):
                 for n in self.nested:
-                    self.n.serialize(param, tostring=False)
+                    n.serialize(param, tostring=False)
             else:
                 # TODO raise an exception
                 pass

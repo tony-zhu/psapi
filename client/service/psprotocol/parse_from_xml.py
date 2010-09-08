@@ -13,12 +13,15 @@ def parse_xml_tree(tree):
     from psapi.client.service import namespaces as ns
     from psapi.client.service.psprotocol.base import Message
     from psapi.client.service.psprotocol.base import Parameter
+    from psapi.client.service.psprotocol.base import Parameters
     from psapi.client.service.psprotocol.base import Metadata
     from psapi.client.service.psprotocol.base import Data
     from psapi.client.service.psprotocol.base import Subject
     
     if tree.tag == "{%s}message" % ns.NMWG:
         return Message.parse_xml_tree(tree)
+    elif tree.tag == "{%s}parameters" % ns.NMWG:
+        return Parameters.parse_xml_tree(tree)
     elif tree.tag == "{%s}parameter" % ns.NMWG:
         return Parameter.parse_xml_tree(tree)
     elif tree.tag == "{%s}metadata" % ns.NMWG:

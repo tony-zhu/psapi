@@ -64,7 +64,7 @@ class Subject(PsObject):
     @staticmethod    
     def parse_xml(xml):
         t = etree.parse(xml)
-        parse_xml_tree(t)
+        Subject.parse_xml_tree(t)
     
     
     @staticmethod    
@@ -72,7 +72,7 @@ class Subject(PsObject):
         if tree.tag != "{%s}subject" % ns.NMWG:
             # TODO raise exception
             pass
-        id = tree.attrib['idref']
+        id = tree.attrib['id']
         idref = None
         if 'metadataIdRef' in tree.attrib:
             idref = tree.attrib['metadataIdRef']

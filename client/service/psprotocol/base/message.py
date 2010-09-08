@@ -12,6 +12,7 @@ from psapi.client.service.psprotocol import parse_xml_tree
 
 from psapi.client.service.psprotocol import PsObject
 from psapi.client.service.psprotocol.base import Parameter
+from psapi.client.service.psprotocol.base import Parameters
 from psapi.client.service.psprotocol.base import Metadata
 from psapi.client.service.psprotocol.base import Data
 
@@ -85,14 +86,13 @@ class Message(PsObject):
             pass
                 
         if isinstance(self.parameters, list):
-            for p in self.parameters:
-                if not isinstance(p, Parameter):
-                    # TODO raise an exception
-                    pass
+            self.parameters = Parameters(self.parameters)
         elif isinstance(self.parameters, Parameter):
-            self.parameters = [self.parameters]
+            self.parameters = Parameters(self.parameters)
+        elif isinstance(self.parameters, Parameters):
+            pass
         elif self.parameters is None:
-            self.parameters = []
+            pass
         else:
             # TODO raise an exception
             pass
@@ -125,11 +125,8 @@ class Message(PsObject):
         for d in self.data:
             d.serialize(m)
                     
-        if len(self.parameters) > 0:
-            params = etree.SubElement(m, '{%s}parameters' % ns.NMWG)
-            params.set('id', "parameters.%i" % self._generate_id())
-            for p in self.parameters:
-                p.serialize(params)
+        if self.parameters is not None:
+                self.parameters.serialize(m)
                 
         if tostring:        
             return etree.tostring(m, pretty_print=True)
@@ -151,7 +148,7 @@ class Message(PsObject):
         
         meta = []
         data = []
-        parameters = []
+        parameters = None
                 
         for c in tree.getchildren():
             obj = parse_xml_tree(c)
@@ -160,8 +157,8 @@ class Message(PsObject):
                 meta.append(obj)
             elif isinstance(obj, Data):
                 data.append(obj)
-            elif isinstance(obj, Parameter):
-                parameters.append(obj)
+            elif isinstance(obj, Parameters):
+                parameters= obj
             else:
                 # TODO raise an exception
                 pass

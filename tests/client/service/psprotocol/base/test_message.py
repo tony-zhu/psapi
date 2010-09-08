@@ -30,6 +30,7 @@ class MessageTest(unittest.TestCase):
     def testSerializeMessage(self):
         xml = self.message.serialize()
         tree = etree.fromstring(xml)
+        
         message2 = Message.parse_xml(xml)
         self.assertEqual(self.message, message2)
         

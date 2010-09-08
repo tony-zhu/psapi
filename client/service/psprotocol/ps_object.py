@@ -58,11 +58,14 @@ class PsObject(object):
         """Override the default equality to test to test the actual values of
         the class's attributes.
         """
-        if not len(self.__dict__) ==  len(other.__dict__):
+        if other is None:
+            print self
+            return False
+        elif not len(self.__dict__) ==  len(other.__dict__):
             return False
         for key in self.__dict__:
             if not key in other.__dict__:
                 return False
-            if not self.__dict__[key] == other.__dict__[key]:
+            elif not self.__dict__[key] == other.__dict__[key]:
                 return False
         return True

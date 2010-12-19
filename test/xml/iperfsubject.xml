@@ -1,0 +1,6 @@
+<iperf:subject id="subject-0" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/">
+    <nmwgt:endPointPair xmlns:nmwgt="http://ggf.org/ns/nmwg/topology/2.0/">
+        <nmwgt:src type="hostname" value="anlborder-ps.it.anl.gov"/>
+        <nmwgt:dst type="hostname" value="ps-bw.es.net"/>
+    </nmwgt:endPointPair>
+</iperf:subject>

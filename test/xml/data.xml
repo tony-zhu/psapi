@@ -1,0 +1,10 @@
+<nmwg:data id="data.16870844" metadataIdRef="metadata.7441249" xmlns:nmwg="http://ggf.org/ns/nmwg/base/2.0/">
+    <iperf:datum throughput="8.23811e+08" timeType="iso" timeValue="Tue Oct 19 15:18:29.823998065 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+    <iperf:datum throughput="8.0573e+08" timeType="iso" timeValue="Tue Oct 19 16:17:55.2163317044 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+    <iperf:datum throughput="8.29349e+08" timeType="iso" timeValue="Tue Oct 19 17:17:55.3262506549 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+    <iperf:datum throughput="8.24512e+08" timeType="iso" timeValue="Tue Oct 19 18:20:02.81157432 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+    <iperf:datum throughput="9.04838e+08" timeType="iso" timeValue="Tue Oct 19 19:17:56.3379084847 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+    <iperf:datum throughput="8.16295e+08" timeType="iso" timeValue="Tue Oct 19 22:21:00.284368039 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+    <iperf:datum throughput="8.32728e+08" timeType="iso" timeValue="Tue Oct 19 23:17:55.2126511324 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+    <iperf:datum throughput="8.18147e+08" timeType="iso" timeValue="Wed Oct 20 04:19:43.2927588221 UTC 2010" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/"/>
+</nmwg:data>

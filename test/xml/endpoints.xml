@@ -1,0 +1,4 @@
+<nmwgt:endPointPair xmlns:nmwgt="http://ggf.org/ns/nmwg/topology/2.0/">
+  <nmwgt:src type="ipv4">128.128.128.128</nmwgt:src>
+  <nmwgt:dst type="hostname">dst.dst.com</nmwgt:dst>
+</nmwgt:endPointPair>

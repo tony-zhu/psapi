@@ -1,0 +1,14 @@
+<nmwg:metadata id="metadata.5108748" metadataIdRef="meta1" xmlns:nmwg="http://ggf.org/ns/nmwg/base/2.0/">
+    <iperf:subject id="subject-0" xmlns:iperf="http://ggf.org/ns/nmwg/tools/iperf/2.0/">
+        <nmwgt:endPointPair xmlns:nmwgt="http://ggf.org/ns/nmwg/topology/2.0/">
+            <nmwgt:src type="hostname" value="anlborder-ps.it.anl.gov"/>
+            <nmwgt:dst type="hostname" value="ps-bw.es.net"/>
+        </nmwgt:endPointPair>
+    </iperf:subject>
+    <nmwg:eventType>http://ggf.org/ns/nmwg/tools/iperf/2.0</nmwg:eventType>
+    <nmwg:eventType>http://ggf.org/ns/nmwg/characteristics/bandwidth/achievable/2.0</nmwg:eventType>
+    <nmwg:parameters id="parameters-0">
+        <nmwg:parameter name="protocol">TCP</nmwg:parameter>
+        <nmwg:parameter name="timeDuration">20</nmwg:parameter>
+    </nmwg:parameters>
+</nmwg:metadata>

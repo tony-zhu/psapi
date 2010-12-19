@@ -1,0 +1,6 @@
+<nmwg:subject id="GenID" xmlns:nmwg="http://ggf.org/ns/nmwg/base/2.0/"  xmlns:nmwgt="http://ggf.org/ns/nmwg/topology/2.0/" >
+    <nmwgt:endPointPair>
+      <nmwgt:src type="ipv4">12.12.12.12</nmwgt:src>
+      <nmwgt:dst type="hostname">dst.dst.com</nmwgt:dst>
+    </nmwgt:endPointPair>
+</nmwg:subject>

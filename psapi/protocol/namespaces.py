@@ -21,6 +21,7 @@ PSSERVICE = "http://ggf.org/ns/nmwg/tools/org/perfsonar/service/1.0/"
 SUMMARY = "http://ggf.org/ns/nmwg/tools/org/perfsonar/service/lookup/summarization/2.0/"
 IPERF2 = "http://ggf.org/ns/nmwg/tools/iperf/2.0/"
 SELECT = 'http://ggf.org/ns/nmwg/ops/select/2.0/'
+NETUTIL = 'http://ggf.org/ns/nmwg/characteristic/utilization/2.0/'
 
 # namspaces map to make the generated XML prettier!
 nsmap = {}
@@ -37,3 +38,4 @@ nsmap['psservice'] = PSSERVICE
 nsmap['summary'] = SUMMARY
 nsmap['iperf'] = IPERF2
 nsmap['select'] = SELECT
+nsmap['netutil'] = NETUTIL

@@ -18,8 +18,7 @@ from lxml import etree
 from psapi.protocol import PsObject
 from psapi.protocol import namespaces as ns
 
-from psapi.utils.ipaddress import is_valid_ipv4
-from psapi.utils.ipaddress import is_valid_ipv6
+from psapi.utils.ipaddress import get_address_type
 
 class EndPointPair(PsObject):
     """See nmwgt:endPointPair schema."""
@@ -28,23 +27,8 @@ class EndPointPair(PsObject):
         self.src = src
         self.dst = dst
         
-        if src is None:
-            self.src_type = None
-        elif is_valid_ipv4(src):
-            self.src_type = 'ipv4'
-        elif is_valid_ipv6(src):
-            self.src_type = 'ipv6'
-        else:
-            self.src_type = 'hostname'
-        
-        if dst is None:
-            self.dst_type = None
-        elif is_valid_ipv4(dst):
-            self.dst_type = 'ipv4'
-        elif is_valid_ipv6(dst):
-            self.dst_type = 'ipv6'
-        else:
-            self.dst_type = 'hostname'
+        self.src_type = get_address_type(src)
+        self.dst_type = get_address_type(dst)
     
     def __eq__(self, other):
         if self.src == other.src and self.dst == other.dst:

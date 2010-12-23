@@ -75,3 +75,15 @@ def is_valid_ipv6(ip):
         $
     """, re.VERBOSE | re.IGNORECASE | re.DOTALL)
     return pattern.match(ip) is not None
+
+
+def get_address_type(address):
+    """Returns ipv4, ipv6, or hostname"""
+    if address is None:
+        return None
+    elif is_valid_ipv4(address):
+        return 'ipv4'
+    elif is_valid_ipv6(address):
+        return 'ipv6'
+    else:
+        return 'hostname'

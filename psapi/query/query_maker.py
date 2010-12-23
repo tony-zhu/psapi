@@ -12,6 +12,8 @@ from psapi.protocol import SelectSubject
 from psapi.protocol import SelectParameters
 from psapi.protocol import Metadata
 from psapi.protocol import Parameters
+from psapi.protocol import NetUtilSubject
+from psapi.protocol import Interface
 
 
 def make_filter(filter_args, meta_id):
@@ -68,10 +70,42 @@ def make_iperf_query(**args):
 
     return query
 
-def make_snmp_query(*args):
+def make_snmp_query(**args):
     """Make SNMP MA query."""
-    # TODO: Implement this
-    return None
+    params = None
+    data_filter = None
+    filter_meta = None
+    args_rest = args.copy()
+    
+    if 'params' in args:
+        params = args['params']
+        del args_rest['params']
+    
+    
+    if 'data_filter' in args:
+        data_filter = args['data_filter']
+        
+        del args_rest['data_filter']
+    
+    interface = Interface(**args_rest)
+    subject = NetUtilSubject(interface)
+    
+    if params is not None:
+        params = Parameters(params)
+    meta = Metadata(subject, events.NETUTIL, params)
+    
+    if data_filter is not None:
+        filter_meta = make_filter(args['data_filter'], meta.object_id)
+    
+    if filter_meta is None:
+        data = Data(ref_id=meta.object_id)
+        query = {'meta': meta, 'data':data, 'message_type':'SetupDataRequest'}
+    else:
+        data = Data(ref_id=filter_meta.object_id)
+        query = {'meta': [meta, filter_meta], 'data':data, \
+                                    'message_type':'SetupDataRequest'}
+
+    return query
 
 def make_query(event_type, **args):
     """
@@ -80,6 +114,6 @@ def make_query(event_type, **args):
     """
     if event_type == events.IPERF2:
         query = make_iperf_query(**args)
-    elif event_type == events.SNMP:
+    elif event_type == events.NETUTIL:
         query = make_snmp_query(**args)
     return query

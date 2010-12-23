@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """
 XML mapping functions
 """
@@ -43,6 +44,14 @@ def parse_psobject_from_xml(xml):
     elif tree.tag == '{%s}subject' % ns.SELECT:
         from psapi.protocol.selectsubject import SelectSubject
         return SelectSubject.from_xml(tree)
+    
+    elif tree.tag == '{%s}subject' % ns.NETUTIL:
+        from psapi.protocol.netutilsubject import NetUtilSubject
+        return NetUtilSubject.from_xml(tree)
+    
+    elif tree.tag == '{%s}interface' % ns.NMWGT:
+        from psapi.protocol.interface import Interface
+        return Interface.from_xml(tree)
     
     elif tree.tag == '{%s}metadata' % ns.NMWG:
         from psapi.protocol.metadata import Metadata

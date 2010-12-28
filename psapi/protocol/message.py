@@ -18,6 +18,18 @@ from psapi.protocol.xmlmapper import parse_psobject_from_xml
 
 class Message(PsObject):
     """nmwg:message object."""
+    
+    #Define perfSONAR message types
+    DATA_INFO_REQUEST = 'DataInfoRequest'
+    DATA_INFO_RESPONSE = 'DataInfoResponse'
+    ECHO_RQUEST = 'EchoRequest'
+    ECHO_RESPONSE = 'EchoResponse'
+    METADATA_KEY_REQUEST = 'MetadataKeyRequest'
+    METADATA_KEY_RESPONSE = 'MetadataKeyResponse'
+    SETUP_DATA_REQUEST = 'SetupDataRequest'
+    SETUP_DATE_RESPONSE = 'SetupDataResponse'
+    
+    
     def __init__(self, meta=None, data=None, message_type=None, \
                 parameters=None, object_id=None, ref_id=None):
         """

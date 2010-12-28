@@ -3,20 +3,18 @@
 """
 Utility methods for making perfSONAR queries.
 """
+__authors__ = [
+    '"Ahmed El-Hassany" <<ahassany@udel.edu>',
+  ]
 
-from psapi.protocol import Data
 from psapi.protocol import events
-from psapi.protocol import EndPointPair
-from psapi.protocol import IPerfSubject
 from psapi.protocol import SelectSubject
 from psapi.protocol import SelectParameters
 from psapi.protocol import Metadata
-from psapi.protocol import Parameters
-from psapi.protocol import NetUtilSubject
-from psapi.protocol import Interface
 
 
 def make_filter(filter_args, meta_id):
+    """Create a filter subject"""
     if 'filter_type' not in filter_args:
         raise ValueError("Filter type is not defined.")
     
@@ -37,74 +35,14 @@ def make_filter(filter_args, meta_id):
 def make_iperf_query(**args):
     """Make iperf MA query.
     """
-    src = None
-    dst = None
-    params = None
-    
-    if 'src' in args:
-        src = args['src']
-    
-    if 'dst' in args:
-        dst = args['dst']
-    
-    if 'params' in args:
-        params = args['params']
-    
-    ends = EndPointPair(src, dst)
-    iperf = IPerfSubject(ends)
-    if params != None:
-        params = Parameters(params)
-    meta = Metadata(iperf, events.IPERF2, params)
-    
-    filter_meta = None
-    if 'data_filter' in args:
-        filter_meta = make_filter(args['data_filter'], meta.object_id)
-    
-    if filter_meta is None:
-        data = Data(ref_id=meta.object_id)
-        query = {'meta': meta, 'data':data, 'message_type':'SetupDataRequest'}
-    else:
-        data = Data(ref_id=filter_meta.object_id)
-        query = {'meta': [meta, filter_meta], 'data':data, \
-                                    'message_type':'SetupDataRequest'}
-
+    from psapi.query import IPerfQuery
+    query = IPerfQuery.make_iperf_query(**args)
     return query
 
 def make_snmp_query(**args):
     """Make SNMP MA query."""
-    params = None
-    data_filter = None
-    filter_meta = None
-    args_rest = args.copy()
-    
-    if 'params' in args:
-        params = args['params']
-        del args_rest['params']
-    
-    
-    if 'data_filter' in args:
-        data_filter = args['data_filter']
-        
-        del args_rest['data_filter']
-    
-    interface = Interface(**args_rest)
-    subject = NetUtilSubject(interface)
-    
-    if params is not None:
-        params = Parameters(params)
-    meta = Metadata(subject, events.NETUTIL, params)
-    
-    if data_filter is not None:
-        filter_meta = make_filter(args['data_filter'], meta.object_id)
-    
-    if filter_meta is None:
-        data = Data(ref_id=meta.object_id)
-        query = {'meta': meta, 'data':data, 'message_type':'SetupDataRequest'}
-    else:
-        data = Data(ref_id=filter_meta.object_id)
-        query = {'meta': [meta, filter_meta], 'data':data, \
-                                    'message_type':'SetupDataRequest'}
-
+    from psapi.query import SNMPQuery
+    query = SNMPQuery.make_snmp_query(**args)
     return query
 
 def make_query(event_type, **args):

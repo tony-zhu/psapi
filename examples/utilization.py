@@ -7,6 +7,7 @@ Sample Run of PsAPI Client to collect SNMP data
 import time
 from psapi.client import Client
 from psapi.query import Query
+from psapi.query import SNMPQuery
 from psapi.protocol import events
 from psapi.protocol import NetUtilSubject
 from psapi.protocol import Interface
@@ -24,9 +25,27 @@ c = Client(url)
 # making a single query
 ################################
 
+interface = Interface(ifAddress='198.124.216.213', direction='in', \
+                            ifName='xe-1/3/0.2611', hostName='aofa-cr2')
+
+query = SNMPQuery(interface=interface, resolution=60, \
+                    consolidation_function='AVERAGE', \
+                    start_time=int(time.time())-1000, \
+                    end_time=int(time.time()))
+
+r = c.query(query)
+
+#read the metadata
+print r['meta']
+
+# read the data
+print r['data'].data
+
+################################
+################################
 # Only filter_type is mandotary, the rest can be any key/value pairs
 select={'filter_type':'select', 'consolidationFunction': 'AVERAGE', \
-        'resolution': 60, 'startTime':int(time.time())-100000, \
+        'resolution': 60, 'startTime':int(time.time())-10000, \
         'endTime':int(time.time())}
       
 # everything but event type is optional!

@@ -1,12 +1,23 @@
 #!/usr/bin/env python
 
+"""
+perfSONAR service client. This client make use of the SOAP client to 
+talk to perfSONAR services.
+"""
 from urlparse import urlparse
 from psapi.client import SoapClient
 from psapi.protocol import Message
 from psapi.protocol.xmlmapper import parse_psobject_from_xml
 
 class Client(object):
+    """perfSONAR service client."""
     def __init__(self, access_point, cert=None, key=None):
+        """
+        Arguments:
+        access_point: full perfSONAR URL
+        cert: if provided SSL connection will be used
+        key: if provided SSL connection will be used
+        """
         self.access_point = access_point
         self.cert = cert
         self.key = key
@@ -15,12 +26,25 @@ class Client(object):
         self.soap_client = SoapClient(parse.hostname, parse.port, \
                                                 parse.path, cert, key)
     
-    def __parse_result(self, result):
+    def parse_result(self, result):
         """Parse results into a dict of meta and data."""
         parse = parse_psobject_from_xml(result)
         return {'meta':parse.meta, 'data':parse.data}
     
-    def aggregate_query(self, queries):
+    def aggregate_query(self, queries, \
+                        message_type=Message.SETUP_DATA_REQUEST, \
+                        parse_result=True):
+        """
+        Send multiple queries to the same service to save round trip 
+        time.
+        
+        Arguments: 
+        queries: list of queries either objects of type Query or 
+                 XML strings
+        message_type: perfSONAR message types, possible values are
+                      defined in Message
+        parse_results: If False return raw XML string
+        """
         if not isinstance(queries, list):
             raise ValueError("queries should be a list.")
         
@@ -39,26 +63,37 @@ class Client(object):
                 data = data + objs['data']
             else:
                 data.append(objs['data'])
-                
-            if message_type is None:
-                message_type = objs['message_type']
-            elif message_type != objs['message_type']:
-                raise ValueError("All queries should be from the same type.")
         
-        xml = Message(meta, data, message_type).to_xml()
+        xml = Message(meta, data, message_type=message_type).to_xml()
         result = self.soap_client.send_request(xml)
-        return self.__parse_result(result)
+        
+        if parse_result is True:
+            return self.parse_result(result)
+        else:
+            return result
     
     
-    def query(self, query):
+    def query(self, query, message_type=Message.SETUP_DATA_REQUEST, \
+                        parse_result=True):
+        """
+        Send One query to perfSONAR service
+        
+        Arguments: 
+        query: either objects of type Query or XML strings
+        message_type: perfSONAR message types, possible values are
+                      defined in Message
+        parse_results: If False return raw XML string
+        """
         result = None
         if hasattr(query, 'to_xml'):
-            result = self.soap_client.send_request(query.to_xml())
+            result = self.soap_client.send_request(\
+                                query.to_xml(message_type=message_type))
         elif isinstance(query, str):
             result = self.soap_client.send_request(query)
         else:
             raise ValueError("Query should be Query instance.")
         
-        return self.__parse_result(result)
-        
-        
+        if parse_result is True:
+            return self.parse_result(result)
+        else:
+            return result

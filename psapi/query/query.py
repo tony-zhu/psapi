@@ -5,6 +5,10 @@ Generic perfSONAR query class this class can be extended to support more
 specific query types.
 """
 
+__authors__ = [
+    '"Ahmed El-Hassany" <<ahassany@udel.edu>',
+  ]
+
 from psapi.protocol import Message
 from psapi.query.query_maker import make_query
 
@@ -22,13 +26,14 @@ class Query(object):
         self.args = args
     
     def get_psobjects(self):
-        """
-        Get a dict of meta, data, message_type
-        """
+        """Get a dict of meta, data"""
         return make_query(self.event_type, **self.args)
     
-    def to_xml(self):
-        """Serialize the query to XML to be sent to perfSONAR."""
+    def get_message(self, message_type=Message.SETUP_DATA_REQUEST):
+        """create perfSONAR message"""
         query = self.get_psobjects()
-        return Message(**query).to_xml()
-        
+        return Message(message_type=message_type, **query)
+    
+    def to_xml(self, message_type=Message.SETUP_DATA_REQUEST):
+        """Serialize the query to XML to be sent to perfSONAR."""
+        return self.get_message(message_type=message_type).to_xml()

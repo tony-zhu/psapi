@@ -5,6 +5,8 @@ Sample Run of PsAPI Client to collect iperf data
 import time
 from psapi.client import Client
 from psapi.query import Query
+from psapi.query import IPerfQuery
+from psapi.protocol import EndPointPair
 from psapi.protocol import events
 
 
@@ -20,6 +22,28 @@ c = Client(url)
 # making a single query
 ################################
 
+# This purely using python objects and needs min knowldge of the 
+# perfSONAR protocol because all params are part of the constructor
+
+endpointpair = EndPointPair(src= '198.124.252.117', dst='198.129.254.46')
+query = IPerfQuery(endpointpair=endpointpair, protocol='TCP',
+            time_duration=20, \
+            start_time=int(time.time())-100000, \
+            end_time=int(time.time()))
+
+
+r = c.query(query)
+
+#read the metadata
+print r['meta']
+
+# read the data
+print r['data'].data
+
+
+#####################################
+# This method allows the user to add any parameter or filter
+#####################################
 # Any key/value pairs paramters can go here
 params = {'protocol':'TCP', 'timeDuration':'20'}
 

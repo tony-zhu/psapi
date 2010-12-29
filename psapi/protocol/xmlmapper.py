@@ -65,6 +65,10 @@ def parse_psobject_from_xml(xml):
         from psapi.protocol.message import Message
         return Message.from_xml(tree)
         
+    elif tree.tag == '{%s}key' % ns.NMWG:
+        from psapi.protocol.key import Key
+        return Key.from_xml(tree)
+        
     else:
         return None
 

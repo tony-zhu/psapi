@@ -9,8 +9,9 @@ from psapi.client import Client
 from psapi.query import Query
 from psapi.query import SNMPQuery
 from psapi.protocol import events
-from psapi.protocol import NetUtilSubject
 from psapi.protocol import Interface
+from psapi.protocol import Message
+from psapi.protocol import NetUtilSubject
 
 
 ################################
@@ -61,4 +62,14 @@ print r['data'].data
 
 
 
+################################
+# Metadata key request
+################################
+interface = Interface(ifAddress='198.124.216.213', direction='in', \
+                            ifName='xe-1/3/0.2611', hostName='aofa-cr2')
 
+query = SNMPQuery(interface=interface)
+
+r = c.query(query, Message.METADATA_KEY_REQUEST)
+
+print r['data'].data.parameters.parameters['maKey']

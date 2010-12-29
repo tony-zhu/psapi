@@ -2,7 +2,7 @@
 
 """Represents Data object
 
-TODO: Currently supports only time series data
+TODO: Needs a better way of identifying time series
 """
 
 __authors__ = [
@@ -11,6 +11,7 @@ __authors__ = [
 
 from lxml import etree
 
+from psapi.protocol import Key
 from psapi.protocol import PsObject
 from psapi.protocol import namespaces as ns
 from psapi.protocol.xmlmapper import parse_timeseries
@@ -48,10 +49,14 @@ class Data(PsObject):
         
         object_id = tree.get('id')
         ref_id = tree.get('metadataIdRef')
-        data = parse_timeseries(tree)
         
-        return Data(data, object_id, ref_id)
-     
+        first_child = tree.iterchildren().next()
+        if first_child.tag == '{%s}key' % ns.NMWG:
+            data = Key.from_xml(first_child)
+        else:
+            data = parse_timeseries(tree)
+        
+        return Data(data, object_id, ref_id)     
     
     def __datum_to_xml(self, datumns, datum, parent):
         """Create a ns:datum element"""

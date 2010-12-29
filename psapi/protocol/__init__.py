@@ -8,5 +8,6 @@ from psapi.protocol.iperfsubject import IPerfSubject
 from psapi.protocol.selectsubject import SelectSubject
 from psapi.protocol.netutilsubject import NetUtilSubject
 from psapi.protocol.metadata import Metadata
+from psapi.protocol.key import Key
 from psapi.protocol.data import Data
 from psapi.protocol.message import Message

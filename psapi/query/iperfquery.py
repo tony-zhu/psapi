@@ -97,7 +97,7 @@ class IPerfQuery(Query):
             params['protocol'] = self.protocol
         
         if self.time_duration is not None:
-            params['protocol'] = self.time_duration
+            params['timeDuration'] = self.time_duration
         
         # Time select filter
         if self.start_time is not None:

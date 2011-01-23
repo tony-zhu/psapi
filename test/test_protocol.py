@@ -28,9 +28,6 @@ class TestPsObject(unittest.TestCase):
         self.assertFalse(pso.object_id is None)
         self.assertTrue(pso.ref_id is None)
         self.assertTrue(isinstance(PsObject.generate_id(), str))
-        
-        self.assertTrue(pso.to_xml() is None)
-        self.assertTrue(PsObject.from_xml('') is None)
 
 class TestEndPointPair(unittest.TestCase):
     """Unit Testing for EndPointPair."""
@@ -97,9 +94,7 @@ class TestParameters(unittest.TestCase):
         params3 = Parameters.from_xml(params1.to_xml(tostring=False))
         self.assertEqual(params1, params2)
         self.assertEqual(params1, params3)
-        
-        
-                
+
 class TestSubject(unittest.TestCase):
     """Unit Testing for Subject."""
     

@@ -11,3 +11,6 @@ from psapi.protocol.metadata import Metadata
 from psapi.protocol.key import Key
 from psapi.protocol.data import Data
 from psapi.protocol.message import Message
+from psapi.protocol.pssubject import PsSubject
+from psapi.protocol.summarysubject import SummarySubject
+from psapi.protocol.address import Address

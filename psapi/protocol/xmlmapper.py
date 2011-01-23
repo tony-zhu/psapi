@@ -69,6 +69,22 @@ def parse_psobject_from_xml(xml):
         from psapi.protocol.key import Key
         return Key.from_xml(tree)
         
+    elif tree.tag == '{%s}subject' % ns.SUMMARY:
+        from psapi.protocol.summarysubject import SummarySubject
+        return SummarySubject.from_xml(tree)
+    
+    elif tree.tag == '{%s}address' % ns.NMTB:
+        from psapi.protocol.address import Address
+        return Address.from_xml(tree)
+        
+    elif tree.tag == '{%s}subject' % ns.PERFSONAR:
+        from psapi.protocol.pssubject import PsSubject
+        return PsSubject.from_xml(tree)
+    
+    elif tree.tag == '{%s}service' % ns.PSSERVICE:
+        from psapi.protocol.psservice import PsService
+        return PsService.from_xml(tree)
+        
     else:
         return None
 

@@ -8,6 +8,9 @@ __authors__ = [
   ]
 
 import random
+from lxml import etree
+from psapi.protocol.xmlmapper import parse_psobject_from_xml
+
 
 class PsObject(object):
     """Any perfSONAR objects contains two basic fields(id, referenceId).
@@ -19,17 +22,33 @@ class PsObject(object):
         else:
             self.object_id = object_id
         self.ref_id = ref_id
-    
+
     def to_xml(self, parent=None, tostring=True):
         """Serialize to XML representation."""
         pass
-    
+
     @staticmethod
     def from_xml(xml):
         """Creates PsObject from XML input."""
-        pass
-    
+        return parse_psobject_from_xml(xml)
+
     @staticmethod
     def generate_id():
         """Generates new random ID."""
         return "GenID.%i" % random.randint(100, 100000000)
+
+    @staticmethod
+    def assert_xml(xml, name):
+        """
+        Asserts the input xml (string or etree object) is valid fully
+        qualified name.
+        """
+        if isinstance(xml, str):
+            tree = etree.fromstring(xml)
+        else:
+            tree = xml
+
+        if tree.tag != name:
+            raise Exception("Found element of type '%s' while expecting\
+                        element of type '%s'" % (tree.tag, name))
+        return tree

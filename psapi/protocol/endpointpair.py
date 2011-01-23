@@ -20,39 +20,32 @@ from psapi.protocol import namespaces as ns
 
 from psapi.utils.ipaddress import get_address_type
 
+
 class EndPointPair(PsObject):
     """See nmwgt:endPointPair schema."""
     def __init__(self, src=None, dst=None, object_id=None, ref_id=None):
         PsObject.__init__(self, object_id, ref_id)
         self.src = src
         self.dst = dst
-        
+
         self.src_type = get_address_type(src)
         self.dst_type = get_address_type(dst)
-    
+
     def __eq__(self, other):
         if self.src == other.src and self.dst == other.dst:
             return True
         else:
             return False
+
     def __ne__(self, other):
         return not self.__eq__(other)
-    
+
     @staticmethod
     def from_xml(xml):
-        if isinstance(xml, str):
-            tree = etree.fromstring(xml)
-        else:
-            tree = xml
-        
-        if tree.tag != '{%s}endPointPair' % ns.NMWGT:
-            raise Exception("Found element of type '%s' while expecting\
-                        element of type '%s'" % \
-                        (tree.tag, '{%s}endPointPair' % ns.NMWGT))
-        
+        tree = PsObject.assert_xml(xml,  '{%s}endPointPair' % ns.NMWGT)
         src = None
         dst = None
-        
+
         for child in tree.iterchildren():
             if child.tag == '{%s}src' % ns.NMWGT:
                 if child.text is None:
@@ -66,27 +59,26 @@ class EndPointPair(PsObject):
                     dst = child.text
             else:
                 pass
-        
+
         return EndPointPair(src, dst)
-    
+
     def to_xml(self, parent=None, tostring=True):
         """Serialize to XML representation."""
         if parent is None:
-            tree = etree.Element('{%s}endPointPair' % \
-                                            ns.NMWGT, nsmap = ns.nsmap)
+            tree = etree.Element('{%s}endPointPair' % ns.NMWGT, nsmap=ns.nsmap)
         else:
             tree = etree.SubElement(parent, '{%s}endPointPair' % ns.NMWGT)
-        
+
         if self.src is not None:
             src = etree.SubElement(tree, '{%s}src' % ns.NMWGT)
             src.set('type', self.src_type)
             src.set('value', self.src)
-        
+
         if self.dst is not None:
             dst = etree.SubElement(tree, '{%s}dst' % ns.NMWGT)
             dst.set('type', self.dst_type)
             dst.set('value', self.dst)
-        
+
         if tostring is True:
             return etree.tostring(tree, pretty_print=True)
         else:

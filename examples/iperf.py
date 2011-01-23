@@ -3,7 +3,7 @@ Sample Run of PsAPI Client to collect iperf data
 """
 
 import time
-from psapi.client import Client
+from psapi.client import ServiceClient
 from psapi.query import Query
 from psapi.query import IPerfQuery
 from psapi.protocol import EndPointPair
@@ -16,7 +16,7 @@ from psapi.protocol import events
 
 # Service access point
 url = 'http://pnwg-pt1.es.net:8085/perfSONAR_PS/services/pSB'
-c = Client(url)
+c = ServiceClient(url)
 
 ################################
 # making a single query
@@ -35,10 +35,10 @@ query = IPerfQuery(endpointpair=endpointpair, protocol='TCP',
 r = c.query(query)
 
 #read the metadata
-print r['meta']
+print r.meta
 
 # read the data
-print r['data'].data
+print r.data
 
 
 #####################################
@@ -55,10 +55,10 @@ q = Query(events.IPERF2, params=params, src= '198.124.252.117', dst='198.129.254
 r = c.query(q)
 
 #read the metadata
-print r['meta']
+print r.meta
 
 # read the data
-print r['data'].data
+print r.data
 
 
 ################################################################
@@ -79,10 +79,10 @@ q4 = Query(events.IPERF2, params=params, src= '198.129.254.46', dst='198.129.254
 r = c.aggregate_query([q1, q2, q3, q4])
 
 # read the data
-print r['data'][0].data
-print r['data'][1].data
-print r['data'][2].data
-print r['data'][3].data
+for key, value in r.meta.iteritems():
+    print "Endpoint:  (src: %s, dst:%s)" % (value.subject.src, value.subject.dst)
+    print r.data[key]
+    print "\n"
 
 ################################################################
 #This is example reteriving all endpoints
@@ -97,14 +97,9 @@ select={'filter_type':'select', 'startTime':int(time.time())-100000, 'endTime':i
 q = Query(events.IPERF2, params=params, data_filter=select)
 r = c.query(q)
 
-for i in range(len(r['meta'])):
-    ends = r['meta'][i].subject.contents
-    data = r['data'][i]
-    # its good to check other ordering first
-    if r['meta'][i].object_id == data.ref_id:
-        print "---------------------------------"
-        print "Endpoint: (%s, %s)" % (ends.src, ends.dst)
-        print "Data: %s" % data.data
-        print "---------------------------------"
-    else:
-        print "Not matching references (%s, %s)" % (r['meta'][i].object_id, data.ref_id)
+
+# read the data
+for key, value in r.meta.iteritems():
+    print "Endpoint:  (src: %s, dst:%s)" % (value.subject.src, value.subject.dst)
+    print r.data[key]
+    print "\n"

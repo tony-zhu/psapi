@@ -13,6 +13,7 @@ from psapi.protocol import EndPointPair
 from psapi.protocol import IPerfSubject
 from psapi.protocol import Metadata
 from psapi.protocol import Parameters
+from psapi.protocol import PsObject
 from psapi.protocol import events
 from psapi.query import Query
 
@@ -116,4 +117,3 @@ class IPerfQuery(Query):
                                         data_filter=data_filter,
                                         endpointpair=self.endpointpair)
         return query
-

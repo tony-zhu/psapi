@@ -5,7 +5,7 @@ Sample Run of PsAPI Client to collect SNMP data
 """
 
 import time
-from psapi.client import Client
+from psapi.client import ServiceClient
 from psapi.query import Query
 from psapi.query import SNMPQuery
 from psapi.protocol import events
@@ -20,7 +20,7 @@ from psapi.protocol import NetUtilSubject
 
 # Service access point
 url = 'http://ps3.es.net:8080/perfSONAR_PS/services/snmpMA'
-c = Client(url)
+c = ServiceClient(url)
 
 ################################
 # making a single query
@@ -37,10 +37,10 @@ query = SNMPQuery(interface=interface, resolution=60, \
 r = c.query(query)
 
 #read the metadata
-print r['meta']
+print r.meta
 
 # read the data
-print r['data'].data
+print r.data
 
 ################################
 ################################
@@ -55,10 +55,10 @@ q = Query(events.NETUTIL, ifAddress='198.124.216.213', \
 r = c.query(q)
 
 #read the metadata
-print r['meta']
+print r.meta
 
 # read the data
-print r['data'].data
+print r.data
 
 
 
@@ -72,4 +72,4 @@ query = SNMPQuery(interface=interface)
 
 r = c.query(query, Message.METADATA_KEY_REQUEST)
 
-print r['data'].data.parameters.parameters['maKey']
+print "metaKey is:", r.data

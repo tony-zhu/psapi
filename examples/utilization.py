@@ -11,7 +11,6 @@ from psapi.query import SNMPQuery
 from psapi.protocol import events
 from psapi.protocol import Interface
 from psapi.protocol import Message
-from psapi.protocol import NetUtilSubject
 
 
 ################################

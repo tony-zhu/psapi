@@ -9,7 +9,6 @@ __authors__ = [
     '"Ahmed El-Hassany" <<ahassany@udel.edu>',
   ]
 
-from psapi.protocol import PsObject
 from psapi.protocol import Message
 from psapi.query.query_maker import make_query
 

@@ -5,6 +5,7 @@ from psapi.protocol.parameters import Parameters
 from psapi.protocol.selectparameters import SelectParameters
 from psapi.protocol.subject import Subject
 from psapi.protocol.iperfsubject import IPerfSubject
+from psapi.protocol.owampsubject import OWAMPSubject
 from psapi.protocol.selectsubject import SelectSubject
 from psapi.protocol.netutilsubject import NetUtilSubject
 from psapi.protocol.metadata import Metadata

@@ -23,6 +23,7 @@ class Message(PsObject):
     DATA_INFO_RESPONSE = 'DataInfoResponse'
     ECHO_RQUEST = 'EchoRequest'
     ECHO_RESPONSE = 'EchoResponse'
+    LS_QUERY_REQUEST = 'LSQueryRequest'
     METADATA_KEY_REQUEST = 'MetadataKeyRequest'
     METADATA_KEY_RESPONSE = 'MetadataKeyResponse'
     SETUP_DATA_REQUEST = 'SetupDataRequest'

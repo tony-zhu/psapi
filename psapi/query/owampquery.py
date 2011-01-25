@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Query IPerf Data
+Query OWAMP Data
 """
 
 __authors__ = [
@@ -10,39 +10,34 @@ __authors__ = [
 
 from psapi.protocol import Data
 from psapi.protocol import EndPointPair
-from psapi.protocol import IPerfSubject
 from psapi.protocol import Metadata
 from psapi.protocol import Parameters
+from psapi.protocol import OWAMPSubject
 from psapi.protocol import events
 from psapi.query import Query
 
 
-class IPerfQuery(Query):
+class OWAMPQuery(Query):
     """
-    IPerfQuery contains the mostly used iperf query parameters in the
+    OWAMPQuery contains the mostly used OWAMP query parameters in the
     constructor.
-    If more parameters are needed use the static method make_iperf_query.
+    If more parameters are needed use the static method make_owamp_query.
     """
-    def __init__(self, endpointpair, protocol=None, time_duration=None,
-                                        start_time=None, end_time=None):
+    def __init__(self, endpointpair, start_time=None, end_time=None):
         """
         Arguments:
             endpointpair: Object of type EndPointPair
-            protocol: 'TCP' or 'UDP'
-            time_duration:
             start_time: unix time format
             end_time: unix time format
         """
-        Query.__init__(self, events.IPERF2)
+        Query.__init__(self, events.OWAMP)
         self.endpointpair = endpointpair
-        self.protocol = protocol
-        self.time_duration = time_duration
         self.start_time = start_time
         self.end_time = end_time
     
     @staticmethod
-    def make_iperf_query(**args):
-        """Make iperf MA query.
+    def make_owamp_query(**args):
+        """Make owamp MA query.
         """
         src = None
         dst = None
@@ -69,10 +64,10 @@ class IPerfQuery(Query):
             params = args['params']
         
         
-        iperf = IPerfSubject(ends)
+        owamp = OWAMPSubject(ends)
         if params != None:
             params = Parameters(params)
-        meta = Metadata(iperf, events.IPERF2, params)
+        meta = Metadata(owamp, events.OWAMP, params)
         
         filter_meta = None
         if 'data_filter' in args:
@@ -90,30 +85,18 @@ class IPerfQuery(Query):
         return query
     
     def get_psobjects(self):
-        params = {}
         data_filter = {'filter_type':'select'}
-        
-        # Params
-        if self.protocol is not None:
-            params['protocol'] = self.protocol
-        
-        if self.time_duration is not None:
-            params['timeDuration'] = self.time_duration
-        
+
         # Time select filter
         if self.start_time is not None:
             data_filter['startTime'] = self.start_time
-        
+
         if self.end_time is not None:
             data_filter['endTime'] = self.end_time
-        
-        
+
         if len(data_filter) == 1:
             data_filter = None
-        if len(params) == 0:
-            params = None
-        
-        query = IPerfQuery.make_iperf_query(params=params,
-                                        data_filter=data_filter,
+
+        query = OWAMPQuery.make_owamp_query(data_filter=data_filter,
                                         endpointpair=self.endpointpair)
         return query

@@ -19,7 +19,7 @@ from psapi.query import Query
 
 class LookupQuery(Query):
     
-    def __init__(self, objects, event_types=None):
+    def __init__(self, objects=None, event_types=None):
         """
         Arguments:
             objects: Objects to query about

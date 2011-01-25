@@ -45,6 +45,13 @@ def make_snmp_query(**args):
     query = SNMPQuery.make_snmp_query(**args)
     return query
 
+def make_owamp_query(**args):
+    """Make OWAMP MA query.
+    """
+    from psapi.query import OWAMPQuery
+    query = OWAMPQuery.make_owamp_query(**args)
+    return query
+
 def make_query(event_type, **args):
     """
     Return results from the appropriate query maker based on the event
@@ -54,4 +61,6 @@ def make_query(event_type, **args):
         query = make_iperf_query(**args)
     elif event_type == events.NETUTIL:
         query = make_snmp_query(**args)
+    elif event_type == events.OWAMP:
+        query = make_owamp_query(**args)
     return query

@@ -52,15 +52,33 @@ def make_owamp_query(**args):
     query = OWAMPQuery.make_owamp_query(**args)
     return query
 
+def make_traceroute_query(**args):
+    """Make Traceroute MA query.
+    """
+    from psapi.query import TracerouteQuery
+    query = TracerouteQuery.make_traceroute_query(**args)
+    return query
+
+def make_lookup_query(**args):
+    """Make Lookup query.
+    """
+    from psapi.query import LookupQuery
+    query = LookupQuery.make_lookup_query(**args)
+    return query
+
 def make_query(event_type, **args):
     """
     Return results from the appropriate query maker based on the event
     type.
     """
-    if event_type == events.IPERF2:
+    if event_type == events.IPERF2 or event_type == events.BANDWIDTH:
         query = make_iperf_query(**args)
     elif event_type == events.NETUTIL:
         query = make_snmp_query(**args)
     elif event_type == events.OWAMP:
         query = make_owamp_query(**args)
+    elif event_type == events.TRACEROUTE:
+        query = make_traceroute_query(**args)
+    elif event_type == events.SUMMARY:
+        query = make_lookup_query(**args)
     return query

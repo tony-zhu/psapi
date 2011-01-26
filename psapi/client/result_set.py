@@ -29,6 +29,7 @@ class ResultSet(object):
 
         meta = {}
         data = {}
+        
         if not isinstance(message.meta, list):
             message.meta = [message.meta]
 
@@ -57,10 +58,7 @@ class ResultSet(object):
                     tmp = tmp.subject.contents
 
             if d.ref_id in data:
-                if isinstance(data[d.ref_id], list):
-                    data[d.ref_id].append(tmp)
-                else:
-                    data[d.ref_id] = [data[d.ref_id], tmp]
+                data[d.ref_id] = [data[d.ref_id], tmp]                    
             else:
                 data[d.ref_id] = tmp
 

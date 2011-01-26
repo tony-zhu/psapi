@@ -8,9 +8,7 @@ __authors__ = [
     '"Ahmed El-Hassany" <<ahassany@udel.edu>',
   ]
 
-from psapi.protocol import Address
 from psapi.protocol import Data
-from psapi.protocol import EndPointPair
 from psapi.protocol import Metadata
 from psapi.protocol import SummarySubject
 from psapi.protocol import events
@@ -30,7 +28,7 @@ class LookupQuery(Query):
         self.event_types = event_types
     
     @staticmethod
-    def make_discovery_query(objects, event_types):
+    def make_lookup_query(objects, event_types):
         """Make LS Summarization query.
         """
         summary_subject = SummarySubject(objects, event_types)
@@ -40,7 +38,7 @@ class LookupQuery(Query):
         return query
     
     def get_psobjects(self):
-        query = LookupQuery.make_discovery_query(self.objects, \
+        query = LookupQuery.make_lookup_query(self.objects, \
                                                     self.event_types)
         return query
 

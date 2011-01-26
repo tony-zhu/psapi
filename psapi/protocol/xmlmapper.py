@@ -41,6 +41,14 @@ def parse_psobject_from_xml(xml):
         from psapi.protocol.iperfsubject import IPerfSubject
         return IPerfSubject.from_xml(tree)
     
+    elif tree.tag == '{%s}subject' % ns.OWAMP:
+        from psapi.protocol.owampsubject import OWAMPSubject
+        return OWAMPSubject.from_xml(tree)
+    
+    elif tree.tag == '{%s}subject' % ns.TRACEROUTE:
+        from psapi.protocol.traceroutesubject import TracerouteSubject
+        return TracerouteSubject.from_xml(tree)
+    
     elif tree.tag == '{%s}subject' % ns.SELECT:
         from psapi.protocol.selectsubject import SelectSubject
         return SelectSubject.from_xml(tree)

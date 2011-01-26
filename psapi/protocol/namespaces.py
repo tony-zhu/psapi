@@ -23,6 +23,7 @@ IPERF2 = "http://ggf.org/ns/nmwg/tools/iperf/2.0/"
 SELECT = 'http://ggf.org/ns/nmwg/ops/select/2.0/'
 NETUTIL = 'http://ggf.org/ns/nmwg/characteristic/utilization/2.0/'
 OWAMP="http://ggf.org/ns/nmwg/tools/owamp/2.0/"
+TRACEROUTE = 'http://ggf.org/ns/nmwg/tools/traceroute/2.0/'
 
 # namspaces map to make the generated XML prettier!
 nsmap = {}
@@ -41,3 +42,4 @@ nsmap['iperf'] = IPERF2
 nsmap['select'] = SELECT
 nsmap['netutil'] = NETUTIL
 nsmap['owamp'] = OWAMP
+nsmap['traceroute'] = TRACEROUTE

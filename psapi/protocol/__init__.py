@@ -16,3 +16,4 @@ from psapi.protocol.message import Message
 from psapi.protocol.pssubject import PsSubject
 from psapi.protocol.summarysubject import SummarySubject
 from psapi.protocol.address import Address
+from psapi.protocol.psservice import PsService

@@ -7,7 +7,7 @@ talk to perfSONAR services.
 from urlparse import urlparse
 from psapi.client import SoapClient
 from psapi.client import ResultSet
-from psapi.protocol import PsObject
+from psapi.protocol import PsService
 from psapi.protocol import Message
 
 
@@ -20,7 +20,10 @@ class ServiceClient(object):
         cert: if provided SSL connection will be used
         key: if provided SSL connection will be used
         """
-        self.access_point = access_point
+        if isinstance(access_point, PsService):
+            self.access_point = access_point.accessPoint
+        else:
+            self.access_point = access_point
         self.cert = cert
         self.key = key
 

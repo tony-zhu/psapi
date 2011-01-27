@@ -6,7 +6,6 @@ from psapi.client import ServiceClient
 from psapi.query import LookupQuery
 from psapi.protocol import Address
 from psapi.protocol import events
-from psapi.protocol import Message
 
 ################################
 # Create new client
@@ -21,7 +20,7 @@ dst = Address('198.129.254.46')
 
 gls_query = LookupQuery([src, dst], events.IPERF2)
 
-r = c.query(gls_query, message_type=Message.LS_QUERY_REQUEST)
+r = c.query(gls_query)
 
 for result in r.data:
     print result.accessPoint

@@ -29,6 +29,7 @@ class ResultSet(object):
 
         meta = {}
         data = {}
+        data_id = {}
         
         if not isinstance(message.meta, list):
             message.meta = [message.meta]
@@ -58,8 +59,13 @@ class ResultSet(object):
                     tmp = tmp.subject.contents
 
             if d.ref_id in data:
-                data[d.ref_id] = [data[d.ref_id], tmp]                    
+                if len(data_id[d.ref_id]) == 1:
+                    data[d.ref_id] = [data[d.ref_id], tmp]
+                else:
+                    data[d.ref_id].append(tmp)
+                data_id[d.ref_id].append(d.object_id)                    
             else:
+                data_id[d.ref_id] = [d.object_id]
                 data[d.ref_id] = tmp
 
         if len(meta) == 1 and len(data) == 1:

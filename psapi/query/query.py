@@ -24,14 +24,17 @@ class Query(object):
         """
         self.event_type = event_type
         self.args = args
+        self.default_message_type = Message.SETUP_DATA_REQUEST
     
     def get_psobjects(self):
         """Get a dict of meta, data"""
         return make_query(self.event_type, **self.args)
     
-    def get_message(self, message_type=Message.SETUP_DATA_REQUEST):
+    def get_message(self, message_type=None):
         """create perfSONAR message"""
         query = self.get_psobjects()
+        if message_type is None:
+            message_type = self.default_message_type
         return Message(message_type=message_type, **query)
     
     def to_xml(self, message_type=Message.SETUP_DATA_REQUEST):

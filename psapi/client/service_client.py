@@ -71,8 +71,7 @@ class ServiceClient(object):
         else:
             return result
 
-    def query(self, query, message_type=Message.SETUP_DATA_REQUEST, \
-                        parse_result=True):
+    def query(self, query, message_type=None, parse_result=True):
         """
         Send One query to perfSONAR service
 

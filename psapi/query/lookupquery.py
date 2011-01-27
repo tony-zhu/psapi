@@ -9,6 +9,7 @@ __authors__ = [
   ]
 
 from psapi.protocol import Data
+from psapi.protocol import Message
 from psapi.protocol import Metadata
 from psapi.protocol import SummarySubject
 from psapi.protocol import events
@@ -26,6 +27,7 @@ class LookupQuery(Query):
         Query.__init__(self, event_types)
         self.objects = objects
         self.event_types = event_types
+        self.default_message_type = Message.LS_QUERY_REQUEST
     
     @staticmethod
     def make_lookup_query(objects, event_types):

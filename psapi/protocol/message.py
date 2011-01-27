@@ -21,7 +21,7 @@ class Message(PsObject):
     #Define perfSONAR message types
     DATA_INFO_REQUEST = 'DataInfoRequest'
     DATA_INFO_RESPONSE = 'DataInfoResponse'
-    ECHO_RQUEST = 'EchoRequest'
+    ECHO_REQUEST = 'EchoRequest'
     ECHO_RESPONSE = 'EchoResponse'
     LS_QUERY_REQUEST = 'LSQueryRequest'
     METADATA_KEY_REQUEST = 'MetadataKeyRequest'

@@ -11,9 +11,12 @@ from psapi.protocol.selectsubject import SelectSubject
 from psapi.protocol.netutilsubject import NetUtilSubject
 from psapi.protocol.metadata import Metadata
 from psapi.protocol.key import Key
+from psapi.protocol.psdatum import PsDatum
 from psapi.protocol.data import Data
 from psapi.protocol.message import Message
 from psapi.protocol.pssubject import PsSubject
 from psapi.protocol.summarysubject import SummarySubject
 from psapi.protocol.address import Address
 from psapi.protocol.psservice import PsService
+from psapi.protocol.xquerysubject import XQuerySubject
+from psapi.protocol.xqueryparameters import XQueryParameters

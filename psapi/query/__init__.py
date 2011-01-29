@@ -5,3 +5,4 @@ from psapi.query.lookupquery import LookupQuery
 from psapi.query.owampquery import OWAMPQuery
 from psapi.query.traceroutequery import TracerouteQuery
 from psapi.query.echorequest import EchoRequest
+from psapi.query.xquery import XQuery

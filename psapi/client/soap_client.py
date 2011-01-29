@@ -4,6 +4,7 @@ SOAP service client.
 
 from httplib import HTTPConnection
 from httplib import HTTPSConnection
+from lxml import etree
 
 
 class SoapClient:
@@ -32,7 +33,7 @@ class SoapClient:
 """ % message
         return header_string
 
-    def send_request(self, message, use_ssl=False, issoap=False):
+    def send_request(self, message, use_ssl=False, issoap=False, parse=False):
         """Send the message to the SOAP server.
 
         Arguments:
@@ -40,6 +41,7 @@ class SoapClient:
         use_ssl: if set secure HTTPS connection will be used
         issoap: if not set the client will add a SOAP header to the
                 message.
+        parse: if true an object of etree Element with be returned
         """
 
         if use_ssl:
@@ -55,7 +57,14 @@ class SoapClient:
         resp = conn.getresponse()
         response = resp.read()
         conn.close()
-        soapstart = '<SOAP-ENV:Body>'
-        soapend = '</SOAP-ENV:Body>'
-        return response[response.find(soapstart) + \
-                        len(soapstart): response.find(soapend)]
+        
+        tree = etree.fromstring(response)
+
+        message = tree.xpath('soap:Body/nmwg:message', \
+                         namespaces={'soap': \
+                                     'http://schemas.xmlsoap.org/soap/envelope/', \
+                                 'nmwg': 'http://ggf.org/ns/nmwg/base/2.0/'})
+        if parse is True:
+            return message[0]
+        else:
+            return etree.tostring(message[0], pretty_print=True)

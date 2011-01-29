@@ -32,6 +32,10 @@ def parse_psobject_from_xml(xml):
     if tree.tag == '{%s}parameters' % ns.SELECT:
         from psapi.protocol.selectparameters import SelectParameters
         return SelectParameters.from_xml(tree)
+
+    elif tree.tag == '{%s}parameters' % ns.XQUERY:
+        from psapi.protocol.xqueryparameters import XQueryParameters
+        return XQueryParameters.from_xml(tree)
         
     elif tree.tag == '{%s}subject' % ns.NMWG:
         from psapi.protocol.subject import Subject
@@ -56,7 +60,19 @@ def parse_psobject_from_xml(xml):
     elif tree.tag == '{%s}subject' % ns.NETUTIL:
         from psapi.protocol.netutilsubject import NetUtilSubject
         return NetUtilSubject.from_xml(tree)
-    
+
+    elif tree.tag == '{%s}subject' % ns.XQUERY:
+        from psapi.protocol.xquerysubject import XQuerySubject
+        return XQuerySubject.from_xml(tree)
+
+    elif tree.tag == '{%s}subject' % ns.SUMMARY:
+        from psapi.protocol.summarysubject import SummarySubject
+        return SummarySubject.from_xml(tree)
+
+    elif tree.tag == '{%s}subject' % ns.PERFSONAR:
+        from psapi.protocol.pssubject import PsSubject
+        return PsSubject.from_xml(tree)
+
     elif tree.tag == '{%s}interface' % ns.NMWGT:
         from psapi.protocol.interface import Interface
         return Interface.from_xml(tree)
@@ -76,23 +92,19 @@ def parse_psobject_from_xml(xml):
     elif tree.tag == '{%s}key' % ns.NMWG:
         from psapi.protocol.key import Key
         return Key.from_xml(tree)
-        
-    elif tree.tag == '{%s}subject' % ns.SUMMARY:
-        from psapi.protocol.summarysubject import SummarySubject
-        return SummarySubject.from_xml(tree)
     
     elif tree.tag == '{%s}address' % ns.NMTB:
         from psapi.protocol.address import Address
         return Address.from_xml(tree)
-        
-    elif tree.tag == '{%s}subject' % ns.PERFSONAR:
-        from psapi.protocol.pssubject import PsSubject
-        return PsSubject.from_xml(tree)
-    
+
     elif tree.tag == '{%s}service' % ns.PSSERVICE:
         from psapi.protocol.psservice import PsService
         return PsService.from_xml(tree)
-        
+
+    elif tree.tag == '{%s}datum' % ns.PSSERVICE:
+        from psapi.protocol.psdatum import PsDatum
+        return PsDatum.from_xml(tree)
+
     else:
         return None
 

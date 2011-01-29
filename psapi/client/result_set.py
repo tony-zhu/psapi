@@ -8,6 +8,7 @@ __authors__ = [
   ]
 
 from psapi.protocol import Key
+from psapi.protocol import PsDatum
 from psapi.protocol import PsSubject
 from psapi.protocol import Metadata
 from psapi.protocol import Message
@@ -57,6 +58,9 @@ class ResultSet(object):
             if isinstance(tmp, Metadata):
                 if isinstance(tmp.subject, PsSubject):
                     tmp = tmp.subject.contents
+
+            if isinstance(tmp, PsDatum):
+                tmp = tmp.contents
 
             if d.ref_id in data:
                 if len(data_id[d.ref_id]) == 1:

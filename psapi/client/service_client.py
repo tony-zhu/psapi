@@ -64,7 +64,7 @@ class ServiceClient(object):
                 data.append(objs['data'])
 
         xml = Message(meta, data, message_type=message_type).to_xml()
-        result = self.soap_client.send_request(xml)
+        result = self.soap_client.send_request(xml, parse=parse_result)
 
         if parse_result is True:
             return ResultSet.parse_result(result)
@@ -84,7 +84,8 @@ class ServiceClient(object):
         result = None
         if hasattr(query, 'to_xml'):
             result = self.soap_client.send_request(\
-                                query.to_xml(message_type=message_type))
+                                query.to_xml(message_type=message_type),
+                                parse=parse_result)
         elif isinstance(query, str):
             result = self.soap_client.send_request(query)
         else:

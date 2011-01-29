@@ -12,6 +12,7 @@ __authors__ = [
 from lxml import etree
 
 from psapi.protocol import Key
+from psapi.protocol import PsDatum
 from psapi.protocol import PsObject
 from psapi.protocol import Metadata
 from psapi.protocol import namespaces as ns
@@ -54,6 +55,8 @@ class Data(PsObject):
             data = Key.from_xml(first_child)
         elif first_child.tag == '{%s}metadata' % ns.NMWG:
             data = Metadata.from_xml(first_child)
+        elif first_child.tag == '{%s}datum' % ns.PSSERVICE:
+            data = PsDatum.from_xml(first_child)
         elif first_child.tag == '{%s}datum' % ns.NMWGR:
             data = first_child.text
         else:

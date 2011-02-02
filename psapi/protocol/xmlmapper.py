@@ -36,7 +36,11 @@ def parse_psobject_from_xml(xml):
     elif tree.tag == '{%s}parameters' % ns.XQUERY:
         from psapi.protocol.xqueryparameters import XQueryParameters
         return XQueryParameters.from_xml(tree)
-        
+
+    elif tree.tag == '{%s}parameters' % ns.PINGER:
+        from psapi.protocol.pingerparameters import PingerParameters
+        return PingerParameters.from_xml(tree)
+
     elif tree.tag == '{%s}subject' % ns.NMWG:
         from psapi.protocol.subject import Subject
         return Subject.from_xml(tree)
@@ -72,6 +76,10 @@ def parse_psobject_from_xml(xml):
     elif tree.tag == '{%s}subject' % ns.PERFSONAR:
         from psapi.protocol.pssubject import PsSubject
         return PsSubject.from_xml(tree)
+
+    elif tree.tag == '{%s}subject' % ns.PINGER:
+        from psapi.protocol.pingersubject import PingerSubject
+        return PingerSubject.from_xml(tree)
 
     elif tree.tag == '{%s}interface' % ns.NMWGT:
         from psapi.protocol.interface import Interface

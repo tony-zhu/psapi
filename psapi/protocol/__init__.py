@@ -20,3 +20,5 @@ from psapi.protocol.address import Address
 from psapi.protocol.psservice import PsService
 from psapi.protocol.xquerysubject import XQuerySubject
 from psapi.protocol.xqueryparameters import XQueryParameters
+from psapi.protocol.pingersubject import PingerSubject
+from psapi.protocol.pingerparameters import PingerParameters

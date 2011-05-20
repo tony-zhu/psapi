@@ -44,49 +44,37 @@ class IPerfQuery(Query):
     def make_iperf_query(**args):
         """Make iperf MA query.
         """
-        src = None
-        dst = None
-        params = None
-        ends = None
         
-        if 'src' in args:
-            src = args['src']
+        # Extract Arguments
+        src = args.get('src', None)
+        dst = args.get('dst', None)
+        params = args.get('params', None)
+        ends = args.get('endpointpair', None)
+        data_filter = args.get('data_filter', None)
+        meta_id = args.get('meta_id', None)
+        data_id = args.get('data_id', None)
         
-        if 'dst' in args:
-            dst = args['dst']
-        
-        if 'endpointpair' in args:
-            ends = args['endpointpair']
-            if not isinstance(ends, EndPointPair):
-                raise ValueError("endpointpair must be of \
-                            type EndPointPair while object of type '%s' \
-                            is found" % type(ends))
-       
         if ends is None:
             ends = EndPointPair(src, dst)
-                
-        if 'params' in args:
-            params = args['params']
-        
+        elif not isinstance(ends, EndPointPair):
+            raise ValueError("endpointpair must be of \
+                        type EndPointPair while object of type '%s' \
+                        is found" % type(ends))
         
         iperf = IPerfSubject(ends)
-        if params != None:
+        if params is not None:
             params = Parameters(params)
-        meta = Metadata(iperf, events.IPERF2, params)
+        meta = Metadata(iperf, events.IPERF2, params, object_id=meta_id)
         
-        filter_meta = None
-        if 'data_filter' in args:
-            if args['data_filter'] is not None:
-                from psapi.query.query_maker import make_filter
-                filter_meta = make_filter(args['data_filter'], meta.object_id)
-        
-        if filter_meta is None:
-            data = Data(ref_id=meta.object_id)
+        if data_filter is None:
+            data = Data(object_id=data_id, ref_id=meta.object_id)
             query = {'meta': meta, 'data':data}
         else:
-            data = Data(ref_id=filter_meta.object_id)
+            from psapi.query.query_maker import make_filter
+            filter_meta = make_filter(args['data_filter'], meta.object_id)
+            data = Data(object_id=data_id, ref_id=filter_meta.object_id)
             query = {'meta': [meta, filter_meta], 'data':data}
-
+        
         return query
     
     def get_psobjects(self):
@@ -115,5 +103,7 @@ class IPerfQuery(Query):
         
         query = IPerfQuery.make_iperf_query(params=params,
                                         data_filter=data_filter,
-                                        endpointpair=self.endpointpair)
+                                        endpointpair=self.endpointpair,
+                                        meta_id=self._meta_object_id,
+                                        data_id=self._data_object_id)
         return query

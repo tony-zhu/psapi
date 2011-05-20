@@ -7,7 +7,7 @@ except ImportError:
     
 
 setup(
-    name='PSAPI',
+    name='psapi',
     version='0.1dev',
     author='Ahmed El-Hassany',
     author_email='ahassany@udel.edu',

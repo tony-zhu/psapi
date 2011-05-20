@@ -10,6 +10,7 @@ __authors__ = [
   ]
 
 from psapi.protocol import Message
+from psapi.protocol import PsObject
 from psapi.query.query_maker import make_query
 
 
@@ -25,6 +26,10 @@ class Query(object):
         self.event_type = event_type
         self.args = args
         self.default_message_type = Message.SETUP_DATA_REQUEST
+        
+        # To make sure that each query object gets the same meta and data ids
+        self._meta_object_id = PsObject.generate_id()
+        self._data_object_id = PsObject.generate_id()
     
     def get_psobjects(self):
         """Get a dict of meta, data"""

@@ -43,44 +43,41 @@ class SNMPQuery(Query):
     @staticmethod
     def make_snmp_query(**args):
         """Make SNMP MA query."""
-        params = None
-        data_filter = None
-        filter_meta = None
-        args_rest = args.copy()
         
-        if 'params' in args:
-            params = args['params']
+        #Exctract Argments
+        params = args.get('params', None)
+        data_filter = args.get('data_filter', None)
+        interface = args.get('interface', None)
+        args_rest = args.copy()
+        meta_id = args.get('meta_id', None)
+        data_id = args.get('data_id', None)
+        
+        if params is not None:
             del args_rest['params']
         
-        if 'data_filter' in args:
-            data_filter = args['data_filter']
-            
+        if data_filter is not None:
             del args_rest['data_filter']
         
-        if 'interface' in args_rest:
-            interface = args_rest['interface']
-            if not isinstance(interface, Interface):
-                raise ValueError("interface must be of \
-                            type Interface while object of type '%s' \
-                            is found" % type(interface))
-        else:
+        if interface is None:
             interface = Interface(**args_rest)
+        elif not isinstance(interface, Interface):
+            raise ValueError("interface must be of \
+                        type Interface while object of type '%s' \
+                        is found" % type(interface))
         
         subject = NetUtilSubject(interface)
         
         if params is not None:
             params = Parameters(params)
-        meta = Metadata(subject, events.NETUTIL, params)
+        meta = Metadata(subject, events.NETUTIL, params, object_id=meta_id)
         
         if data_filter is not None:
-            from psapi.query.query_maker import make_filter
-            filter_meta = make_filter(args['data_filter'], meta.object_id)
-        
-        if filter_meta is None:
-            data = Data(ref_id=meta.object_id)
+            data = Data(object_id=data_id, ref_id=meta.object_id)
             query = {'meta': meta, 'data':data}
         else:
-            data = Data(ref_id=filter_meta.object_id)
+            from psapi.query.query_maker import make_filter
+            filter_meta = make_filter(args['data_filter'], meta.object_id)
+            data = Data(object_id=data_id, ref_id=filter_meta.object_id)
             query = {'meta': [meta, filter_meta], 'data':data}
 
         return query
@@ -106,6 +103,8 @@ class SNMPQuery(Query):
         
         query = SNMPQuery.make_snmp_query(params=None,
                                         data_filter=data_filter,
-                                        interface=self.interface)
+                                        interface=self.interface,
+                                        meta_id=self._meta_object_id,
+                                        data_id=self._data_object_id)
         return query
 

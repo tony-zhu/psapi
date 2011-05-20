@@ -16,10 +16,13 @@ from psapi.query import Query
 
 
 class EchoRequest(Query):
+    """To check the liveness of perfSONAR service"""
+    
     def __init__(self):
+        Query.__init__(self, events.ECHO)
         self.default_message_type = Message.ECHO_REQUEST
 
     def get_psobjects(self):
-        meta = Metadata(event_types=events.ECHO)
-        data = Data(ref_id=meta.object_id)
+        meta = Metadata(object_id=self._meta_object_id, event_types=events.ECHO)
+        data = Data(object_id=self._data_object_id, ref_id=meta.object_id)
         return {'meta':meta, 'data':data}

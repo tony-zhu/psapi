@@ -30,17 +30,19 @@ class LookupQuery(Query):
         self.default_message_type = Message.LS_QUERY_REQUEST
     
     @staticmethod
-    def make_lookup_query(objects, event_types):
+    def make_lookup_query(objects, event_types, meta_object_id=None, data_object_id=None):
         """Make LS Summarization query.
         """
         summary_subject = SummarySubject(objects, event_types)
-        meta = Metadata(summary_subject, events.SUMMARY)        
-        data = Data(ref_id=meta.object_id)
+        meta = Metadata(summary_subject, events.SUMMARY, object_id=meta_object_id)        
+        data = Data(object_id=data_object_id, ref_id=meta.object_id)
         query = {'meta': meta, 'data':data}
         return query
     
     def get_psobjects(self):
-        query = LookupQuery.make_lookup_query(self.objects, \
-                                                    self.event_types)
+        query = LookupQuery.make_lookup_query(self.objects,
+                                              self.event_types,
+                                              meta_object_id=self._meta_object_id,
+                                              data_object_id=self._data_object_id)
         return query
 

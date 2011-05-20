@@ -27,7 +27,10 @@ def make_filter(filter_args, meta_id):
     if filter_type == 'select':
         filter_subject = SelectSubject(ref_id=meta_id)
         filter_args = SelectParameters(params)
-        filter_meta = Metadata(filter_subject, events.SELECT, filter_args)
+        filter_meta = Metadata(filter_subject,
+                               events.SELECT,
+                               filter_args,
+                               object_id="filter." + meta_id)
     
     return filter_meta
 

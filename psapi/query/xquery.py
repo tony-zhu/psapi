@@ -18,6 +18,7 @@ from psapi.query import Query
 
 
 class XQuery(Query):
+    """Query for plain XQueries to perfSONAR services"""
     
     def __init__(self, query=None):
         """
@@ -29,17 +30,21 @@ class XQuery(Query):
         self.default_message_type = Message.LS_QUERY_REQUEST
     
     @staticmethod
-    def make_xquery(query):
+    def make_xquery(query, meta_object_id=None, data_object_id=None):
         """Make LS XQuery.
         """
         xsubject = XQuerySubject(query)
         xparams = XQueryParameters({'lsOutput':'native'})
-        meta = Metadata(xsubject, events.XQUERY, xparams)        
-        data = Data(ref_id=meta.object_id)
+        meta = Metadata(xsubject,
+                        events.XQUERY, xparams,
+                        object_id=meta_object_id)        
+        data = Data(object_id=data_object_id, ref_id=meta.object_id)
         query = {'meta': meta, 'data':data}
         return query
     
     def get_psobjects(self):
-        query = XQuery.make_xquery(self.query)
+        query = XQuery.make_xquery(self.query,
+                                   meta_object_id=self._meta_object_id,
+                                   data_object_id=self._data_object_id)
         return query
 

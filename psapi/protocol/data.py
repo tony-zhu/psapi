@@ -37,7 +37,7 @@ class Data(PsObject):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def __getattribute__(self,name):
+    def __getattribute__(self, name):
         try:
             return object.__getattribute__(self, name)
         except AttributeError:
@@ -49,18 +49,20 @@ class Data(PsObject):
 
         object_id = tree.get('id')
         ref_id = tree.get('metadataIdRef')
-
-        first_child = tree.iterchildren().next()
-        if first_child.tag == '{%s}key' % ns.NMWG:
-            data = Key.from_xml(first_child)
-        elif first_child.tag == '{%s}metadata' % ns.NMWG:
-            data = Metadata.from_xml(first_child)
-        elif first_child.tag == '{%s}datum' % ns.PSSERVICE:
-            data = PsDatum.from_xml(first_child)
-        elif first_child.tag == '{%s}datum' % ns.NMWGR:
-            data = first_child.text
+        if tree.getchildren():
+            first_child = tree.iterchildren().next()
+            if first_child.tag == '{%s}key' % ns.NMWG:
+                data = Key.from_xml(first_child)
+            elif first_child.tag == '{%s}metadata' % ns.NMWG:
+                data = Metadata.from_xml(first_child)
+            elif first_child.tag == '{%s}datum' % ns.PSSERVICE:
+                data = PsDatum.from_xml(first_child)
+            elif first_child.tag == '{%s}datum' % ns.NMWGR:
+                data = first_child.text
+            else:
+                data = parse_timeseries(tree)
         else:
-            data = parse_timeseries(tree)
+            data = None
 
         return Data(data, object_id, ref_id)
 
@@ -89,9 +91,12 @@ class Data(PsObject):
             tree.set('metadataIdRef', self.ref_id)
 
         if self.data is not None:
-            for datumns in self.data:
-                for datum in self.data[datumns]:
-                    self.__datum_to_xml(datumns, datum, tree)
+            if isinstance(self.data, PsObject):
+                self.data.to_xml(tree, False)
+            else:
+                for datumns in self.data:
+                    for datum in self.data[datumns]:
+                        self.__datum_to_xml(datumns, datum, tree)
 
         if tostring:
             return etree.tostring(tree, pretty_print=True)

@@ -76,7 +76,7 @@ def make_query(event_type, **args):
     """
     if event_type == events.IPERF2 or event_type == events.BANDWIDTH:
         query = make_iperf_query(**args)
-    elif event_type == events.NETUTIL:
+    elif event_type == events.NET_UTILIZATION:
         query = make_snmp_query(**args)
     elif event_type == events.OWAMP:
         query = make_owamp_query(**args)

@@ -38,7 +38,7 @@ class TestEndPointPair(unittest.TestCase):
         self.src = '128.128.128.128'
         self.src_type = 'ipv4'
         self.dst = 'dst.dst.com'
-        self.dst_type = 'hostname'
+        self.dst_type = 'dns'
         self.src2 = '129.129.129.129'
         self.dst2 = 'dst2.dst2.com'
         
@@ -211,10 +211,10 @@ class TestMetadata(unittest.TestCase):
     def test_serialize(self):
         oid = 'TestId'
         ref_id = 'refID'
-        meta1 = Metadata(self.subject1, event_types=events.IPERF2, \
+        meta1 = Metadata(self.subject1, event_types=[events.IPERF2], \
                         parameters=self.params, \
                         object_id=oid, ref_id=ref_id)
-        meta2 = Metadata(self.subject2, event_types=events.IPERF2, \
+        meta2 = Metadata(self.subject2, event_types=[events.IPERF2], \
                         parameters=self.params, \
                         object_id=oid, ref_id=ref_id)
         
@@ -224,6 +224,9 @@ class TestMetadata(unittest.TestCase):
         meta5 = Metadata.from_xml(meta2.to_xml(tostring=True))
         meta6 = Metadata.from_xml(meta2.to_xml(tostring=False))
         
+        print meta1.to_xml()
+        print "**********"
+        print meta3.to_xml()
         self.assertEqual(meta1, meta3)
         self.assertEqual(meta1, meta4)
         

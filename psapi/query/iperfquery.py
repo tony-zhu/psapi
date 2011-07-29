@@ -23,8 +23,8 @@ class IPerfQuery(Query):
     constructor.
     If more parameters are needed use the static method make_iperf_query.
     """
-    def __init__(self, endpointpair, protocol=None, time_duration=None,
-                                        start_time=None, end_time=None):
+    def __init__(self, endpointpair=None, maKey=None, protocol=None, time_duration=None,
+                    start_time=None, end_time=None):
         """
         Arguments:
             endpointpair: Object of type EndPointPair
@@ -32,13 +32,18 @@ class IPerfQuery(Query):
             time_duration:
             start_time: unix time format
             end_time: unix time format
+            maKey: metadata key
         """
+        if not endpointpair and not maKey:
+            raise ValueError("endpointpair or maKey must be defined")
+        
         Query.__init__(self, events.IPERF2)
         self.endpointpair = endpointpair
         self.protocol = protocol
         self.time_duration = time_duration
         self.start_time = start_time
         self.end_time = end_time
+        self.maKey = maKey
     
     @staticmethod
     def make_iperf_query(**args):
@@ -53,6 +58,7 @@ class IPerfQuery(Query):
         data_filter = args.get('data_filter', None)
         meta_id = args.get('meta_id', None)
         data_id = args.get('data_id', None)
+        maKey = args.get('maKey', None)
         
         if ends is None:
             ends = EndPointPair(src, dst)
@@ -61,10 +67,16 @@ class IPerfQuery(Query):
                         type EndPointPair while object of type '%s' \
                         is found" % type(ends))
         
-        iperf = IPerfSubject(ends)
-        if params is not None:
+        if params:
             params = Parameters(params)
-        meta = Metadata(iperf, events.IPERF2, params, object_id=meta_id)
+        
+        if maKey:
+            meta = Metadata(maKey=maKey, event_types=events.IPERF2,
+                            parameters=params, object_id=meta_id)
+        else: 
+            iperf = IPerfSubject(ends)
+            meta = Metadata(subject=iperf, event_types=events.IPERF2,
+                            parameters=params, object_id=meta_id)
         
         if data_filter is None:
             data = Data(object_id=data_id, ref_id=meta.object_id)
@@ -79,7 +91,7 @@ class IPerfQuery(Query):
     
     def get_psobjects(self):
         params = {}
-        data_filter = {'filter_type':'select'}
+        data_filter = {'filter_type': 'select'}
         
         # Params
         if self.protocol is not None:
@@ -95,7 +107,6 @@ class IPerfQuery(Query):
         if self.end_time is not None:
             data_filter['endTime'] = self.end_time
         
-        
         if len(data_filter) == 1:
             data_filter = None
         if len(params) == 0:
@@ -104,6 +115,7 @@ class IPerfQuery(Query):
         query = IPerfQuery.make_iperf_query(params=params,
                                         data_filter=data_filter,
                                         endpointpair=self.endpointpair,
+                                        maKey=self.maKey,
                                         meta_id=self._meta_object_id,
                                         data_id=self._data_object_id)
         return query

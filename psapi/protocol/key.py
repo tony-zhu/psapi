@@ -18,10 +18,16 @@ from psapi.protocol import namespaces as ns
 
 class Key(PsObject):
     """See nmwg:key schema."""
-    def __init__(self, parameters, object_id=None):
+    def __init__(self, maKey, object_id=None):
         PsObject.__init__(self, object_id, ref_id=None)
-        self.parameters = parameters
-
+        
+        if isinstance(maKey, Parameters):
+            self.parameters = maKey
+            self.key = self.parameters.maKey
+        else:
+            self.parameters = Parameters({'maKey':maKey})
+            self.key = maKey
+        
     def __eq__(self, other):
         if other is None:
             return False
@@ -30,7 +36,13 @@ class Key(PsObject):
         if self.parameters != other.parameters:
             return False
         return True
-
+    
+    def __setattribute__(self, name, value):
+        if name == 'maKey':
+            return object.__(self.parameters, 'maKey', value)
+        else:
+            return object.__setattribute__(self, name)
+    
     @staticmethod
     def from_xml(xml):
         tree = PsObject.assert_xml(xml, '{%s}key' % ns.NMWG)
@@ -52,10 +64,10 @@ class Key(PsObject):
             tree = etree.Element('{%s}key' % ns.NMWG, nsmap=ns.nsmap)
         else:
             tree = etree.SubElement(parent, '{%s}key' % ns.NMWG)
-
+        
         if self.object_id is not None:
             tree.set('id', self.object_id)
-
+        
         if self.parameters is not None:
             self.parameters.to_xml(tree, tostring=False)
 

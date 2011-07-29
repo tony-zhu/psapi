@@ -27,6 +27,10 @@ Address =
                 text
         ) &
         attribute type { xsd:string }
+    
+    
+    Note:
+        Some SNMPMA uses description instead of ifDescription
 """
 
 __authors__ = [
@@ -48,7 +52,7 @@ class Interface(PsObject):
                   ifDescription=None, ifAddress=None, ifHostName=None, \
                   ifIndex=None, ifType=None, direction=None, \
                   authRealm=None, classofService=None, capacity=None, \
-                  object_id=None, ref_id=None):
+                  description=None, object_id=None, ref_id=None):
         PsObject.__init__(self, object_id, ref_id)
         self.ipAddress = ipAddress
         self.hostName = hostName
@@ -62,12 +66,13 @@ class Interface(PsObject):
         self.authRealm = authRealm
         self.classofService = classofService
         self.capacity = capacity
+        self.description = description
 
     def __eq__(self, other):
         attrs = ['direction', 'ifType', 'ifHostName', 'hostName', \
                     'ifDescription', 'classofService', 'ifIndex', \
                     'capacity', 'ifName', 'ipAddress', 'authRealm', \
-                    'ifAddress']
+                    'ifAddress', 'description']
         for attr in attrs:
             if hasattr(self, attr) and not hasattr(other, attr):
                 return False
@@ -96,6 +101,7 @@ class Interface(PsObject):
         children['authRealm'] = None
         children['classofService'] = None
         children['capacity'] = None
+        children['description'] = None
 
         for child in tree.iterchildren():
             groups = re.match("{(.*)}(.*)", child.tag).groups()
@@ -115,24 +121,30 @@ class Interface(PsObject):
         else:
             tree = etree.SubElement(parent, '{%s}interface' % ns.NMWGT)
 
-        if self.ipAddress is not None:
-            ip = etree.SubElement(tree, '{%s}ipAddress' % ns.NMWGT)
-            ip.text = self.ipAddress
-            ip.set('type', get_address_type(self.ipAddress))
+        if self.ipAddress:
+            if hasattr(self.ipAddress, 'to_xml'):
+                self.ipAddress.to_xml(tree)
+            else:
+                ip = etree.SubElement(tree, '{%s}ipAddress' % ns.NMWGT)
+                ip.text = self.ipAddress
+                ip.set('type', get_address_type(self.ipAddress))
 
-        if self.ifAddress is not None:
-            ifAddress = etree.SubElement(tree, '{%s}ifAddress' % ns.NMWGT)
-            ifAddress.text = self.ifAddress
-            ifAddress.set('type', get_address_type(self.ifAddress))
+        if self.ifAddress:
+            if hasattr(self.ifAddress, 'to_xml'):
+                self.ifAddress.to_xml(tree)
+            else:
+                ifAddress = etree.SubElement(tree, '{%s}ifAddress' % ns.NMWGT)
+                ifAddress.text = self.ifAddress
+                # ifAddress.set('type', get_address_type(self.ifAddress))
 
         attrs = ['direction', 'ifType', 'ifHostName', 'hostName', \
                     'ifDescription', 'classofService', 'ifIndex', \
-                    'capacity', 'ifName', 'authRealm']
+                    'capacity', 'ifName', 'authRealm', 'description']
 
         for attr in attrs:
             if getattr(self, attr) is not None:
                 node = etree.SubElement(tree, '{%s}%s' % (ns.NMWGT, attr))
-                node.text = getattr(self, attr)
+                node.text = str(getattr(self, attr))
 
         if tostring:
             return etree.tostring(tree, pretty_print=True)

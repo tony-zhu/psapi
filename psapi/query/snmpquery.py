@@ -10,8 +10,10 @@ __authors__ = [
 
 from psapi.protocol import Data
 from psapi.protocol import Interface
-from psapi.protocol import NetUtilSubject
 from psapi.protocol import Metadata
+from psapi.protocol import NetDiscardSubject
+from psapi.protocol import NetErrorSubject
+from psapi.protocol import NetUtilSubject
 from psapi.protocol import Parameters
 from psapi.protocol import events
 from psapi.query import Query
@@ -23,60 +25,76 @@ class SNMPQuery(Query):
     constructor.
     If more parameters are needed use the static method make_SNMP_query.
     """
-    def __init__(self, interface, consolidation_function=None, \
-                    resolution=None, start_time=None, end_time=None):
+    def __init__(self, interface=None, maKey=None, event=events.NET_UTILIZATION,
+                 consolidation_function=None, resolution=None, start_time=None,
+                 end_time=None):
         """
         Arguments:
             interface: Object of type Interface
+            maKey: metadata key
+            event: NET_UTILIZATION, NET_ERROR, NET_DISCARD
             consolidation_function: AVERAGE
             resolution: resolution in seconds
             start_time: unix time format
-            end_time: unix time format
+            end_time: unix time format            
         """
-        Query.__init__(self, events.NETUTIL)
+        if not interface and not maKey:
+            raise ValueError("interface or maKey must be defined")
+        
+        Query.__init__(self, events.NET_UTILIZATION)
         self.interface = interface
+        self.maKey = maKey
+        self.event = event 
         self.consolidation_function = consolidation_function
         self.resolution = resolution
         self.start_time = start_time
         self.end_time = end_time
+        
     
     @staticmethod
     def make_snmp_query(**args):
         """Make SNMP MA query."""
         
         #Exctract Argments
-        params = args.get('params', None)
-        data_filter = args.get('data_filter', None)
-        interface = args.get('interface', None)
-        args_rest = args.copy()
-        meta_id = args.get('meta_id', None)
-        data_id = args.get('data_id', None)
-        
-        if params is not None:
-            del args_rest['params']
-        
-        if data_filter is not None:
-            del args_rest['data_filter']
+        #args_rest = args.copy()
+        params = args.pop('params', None)
+        data_filter = args.pop('data_filter', None)
+        interface = args.pop('interface', None)
+        meta_id = args.pop('meta_id', None)
+        data_id = args.pop('data_id', None)
+        maKey = args.pop('maKey', None)
+        event = args.pop('event', events.NET_UTILIZATION)
         
         if interface is None:
-            interface = Interface(**args_rest)
+            interface = Interface(**args)
         elif not isinstance(interface, Interface):
             raise ValueError("interface must be of \
                         type Interface while object of type '%s' \
                         is found" % type(interface))
+            
+        if maKey:
+            meta = Metadata(maKey=maKey, event_types=event,
+                            parameters=params, object_id=meta_id)
+        else:
+            if event == events.NET_UTILIZATION:
+                subject = NetUtilSubject(interface)
+            elif event == events.NET_DISCARD:
+                subject = NetDiscardSubject(interface)
+            elif event == events.NET_ERROR:
+                subject = NetErrorSubject(interface)
+            else:
+                raise ValueError("event must be NET_UTILIZATION, NET_DISCARD, or NET_ERROR")
+            
+            meta = Metadata(subject=subject, event_types=event,
+                            parameters=params, object_id=meta_id)
         
-        subject = NetUtilSubject(interface)
         
-        if params is not None:
-            params = Parameters(params)
-        meta = Metadata(subject, events.NETUTIL, params, object_id=meta_id)
-        
-        if data_filter is not None:
+        if not data_filter:
             data = Data(object_id=data_id, ref_id=meta.object_id)
             query = {'meta': meta, 'data':data}
         else:
             from psapi.query.query_maker import make_filter
-            filter_meta = make_filter(args['data_filter'], meta.object_id)
+            filter_meta = make_filter(data_filter, meta.object_id)
             data = Data(object_id=data_id, ref_id=filter_meta.object_id)
             query = {'meta': [meta, filter_meta], 'data':data}
 
@@ -104,6 +122,8 @@ class SNMPQuery(Query):
         query = SNMPQuery.make_snmp_query(params=None,
                                         data_filter=data_filter,
                                         interface=self.interface,
+                                        maKey=self.maKey,
+                                        event=self.event,
                                         meta_id=self._meta_object_id,
                                         data_id=self._data_object_id)
         return query

@@ -49,7 +49,7 @@ select={'filter_type':'select', 'consolidationFunction': 'AVERAGE', \
         'endTime':int(time.time())}
       
 # everything but event type is optional!
-q = Query(events.NETUTIL, ifAddress='198.124.216.213', \
+q = Query(events.NET_UTILIZATION, ifAddress='198.124.216.213', \
         hostName='aofa-cr2', ifName='xe-1/3/0.2611', direction='in', data_filter=select)
 r = c.query(q)
 

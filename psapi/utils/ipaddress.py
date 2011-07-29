@@ -5,46 +5,15 @@ http://stackoverflow.com/questions/319279/how-to-validate-ip-address-in-python
 """
 
 import re
+hostname_re = re.compile("(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
+ipv4_re = re.compile(r'^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$')
 
 def is_valid_ipv4(ip):
     """Validates IPv4 addresses.
     """
-    pattern = re.compile(r"""
-        ^
-        (?:
-          # Dotted variants:
-          (?:
-            # Decimal 1-255 (no leading 0's)
-            [3-9]\d?|2(?:5[0-5]|[0-4]?\d)?|1\d{0,2}
-          |
-            0x0*[0-9a-f]{1,2}  # Hexadecimal 0x0 - 0xFF (possible leading 0's)
-          |
-            0+[1-3]?[0-7]{0,2} # Octal 0 - 0377 (possible leading 0's)
-          )
-          (?:                  # Repeat 0-3 times, separated by a dot
-            \.
-            (?:
-              [3-9]\d?|2(?:5[0-5]|[0-4]?\d)?|1\d{0,2}
-            |
-              0x0*[0-9a-f]{1,2}
-            |
-              0+[1-3]?[0-7]{0,2}
-            )
-          ){0,3}
-        |
-          0x0*[0-9a-f]{1,8}    # Hexadecimal notation, 0x0 - 0xffffffff
-        |
-          0+[0-3]?[0-7]{0,10}  # Octal notation, 0 - 037777777777
-        |
-          # Decimal notation, 1-4294967295:
-          429496729[0-5]|42949672[0-8]\d|4294967[01]\d\d|429496[0-6]\d{3}|
-          42949[0-5]\d{4}|4294[0-8]\d{5}|429[0-3]\d{6}|42[0-8]\d{7}|
-          4[01]\d{8}|[1-3]\d{0,9}|[4-9]\d{0,8}
-        )
-        $
-    """, re.VERBOSE | re.IGNORECASE)
-    return pattern.match(ip) is not None
-    
+    return ipv4_re.match(ip) is not None
+
+
 def is_valid_ipv6(ip):
     """Validates IPv6 addresses.
     """
@@ -77,13 +46,33 @@ def is_valid_ipv6(ip):
     return pattern.match(ip) is not None
 
 
+def is_valid_hostname(address):
+    """
+    Checks if the address is a valid hostname according to RFC1034#section-3.1
+    """
+    if len(address) > 255:
+        return False
+    if address[-1:] == ".":
+        address = address[:-1]
+    return all(hostname_re.match(x) for x in address.split("."))
+
+
 def get_address_type(address):
-    """Returns ipv4, ipv6, or hostname"""
+    """Returns ipv4, ipv6, dns, url, or hostname"""
     if address is None:
         return None
     elif is_valid_ipv4(address):
         return 'ipv4'
     elif is_valid_ipv6(address):
         return 'ipv6'
+    elif address.find("/") >= 0:
+        return 'url'
+    elif is_valid_hostname(address):
+        # TODO Need better check for toplevel domain names
+        address_len = len(address)
+        if address[address_len-3] == '.' or address[address_len-4] == '.': 
+            return 'dns'
+        else:
+            return 'hostname'
     else:
-        return 'hostname'
+        return None

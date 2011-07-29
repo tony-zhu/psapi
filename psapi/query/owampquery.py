@@ -23,17 +23,22 @@ class OWAMPQuery(Query):
     constructor.
     If more parameters are needed use the static method make_owamp_query.
     """
-    def __init__(self, endpointpair, start_time=None, end_time=None):
+    def __init__(self, endpointpair=None, maKey=None, start_time=None, end_time=None):
         """
         Arguments:
             endpointpair: Object of type EndPointPair
             start_time: unix time format
             end_time: unix time format
+            maKey: metadata key
         """
+        if not endpointpair and not maKey:
+            raise ValueError("endpointpair or maKey must be defined")
+        
         Query.__init__(self, events.OWAMP)
         self.endpointpair = endpointpair
         self.start_time = start_time
         self.end_time = end_time
+        self.maKey = maKey
     
     @staticmethod
     def make_owamp_query(**args):
@@ -47,7 +52,7 @@ class OWAMPQuery(Query):
         data_filter = args.get('data_filter', None)
         meta_id = args.get('meta_id', None)
         data_id = args.get('data_id', None)
-        
+        maKey = args.get('maKey', None)
         
         if ends is None:
             ends = EndPointPair(src, dst)
@@ -56,10 +61,17 @@ class OWAMPQuery(Query):
                             type EndPointPair while object of type '%s' \
                             is found" % type(ends))
         
-        owamp = OWAMPSubject(ends)
-        if params is not None:
+        if params:
             params = Parameters(params)
-        meta = Metadata(owamp, events.OWAMP, params, object_id=meta_id)
+        
+        if maKey:
+            meta = Metadata(maKey=maKey, event_types=events.OWAMP,
+                            parameters=params, object_id=meta_id)
+        else: 
+            owamp = OWAMPSubject(ends)
+            meta = Metadata(subject=owamp, event_types=events.OWAMP,
+                    parameters=params, object_id=meta_id)
+         
         
         if data_filter is None:
             data = Data(object_id=data_id, ref_id=meta.object_id)
@@ -87,6 +99,7 @@ class OWAMPQuery(Query):
 
         query = OWAMPQuery.make_owamp_query(data_filter=data_filter,
                                         endpointpair=self.endpointpair,
+                                        maKey=self.maKey,
                                         meta_id=self._meta_object_id,
                                         data_id=self._data_object_id)
         return query

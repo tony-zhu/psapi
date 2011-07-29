@@ -71,13 +71,15 @@ class EndPointPair(PsObject):
 
         if self.src is not None:
             src = etree.SubElement(tree, '{%s}src' % ns.NMWGT)
-            src.set('type', self.src_type)
             src.set('value', self.src)
+            if self.src_type:
+                src.set('type', self.src_type)
 
         if self.dst is not None:
             dst = etree.SubElement(tree, '{%s}dst' % ns.NMWGT)
-            dst.set('type', self.dst_type)
             dst.set('value', self.dst)
+            if self.dst_type:
+                src.set('type', self.dst_type)
 
         if tostring is True:
             return etree.tostring(tree, pretty_print=True)

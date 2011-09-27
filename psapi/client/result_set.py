@@ -72,8 +72,4 @@ class ResultSet(object):
                 data_id[d.ref_id] = [d.object_id]
                 data[d.ref_id] = tmp
 
-        if len(meta) == 1 and len(data) == 1:
-            meta = meta.items()[0][1]
-            data = data.items()[0][1]
-
         return ResultSet(meta, data)

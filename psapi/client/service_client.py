@@ -31,19 +31,16 @@ class ServiceClient(object):
         self.soap_client = SoapClient(parse.hostname, parse.port, \
                                                 parse.path, cert, key)
 
-    def aggregate_query(self, queries, \
-                        message_type=Message.SETUP_DATA_REQUEST, \
-                        parse_result=True):
+    def make_aggregate_query(self, queries, \
+                        message_type=Message.SETUP_DATA_REQUEST):
         """
-        Send multiple queries to the same service to save round trip
-        time.
+        Pack multiple queries into one message object.
 
         Arguments:
         queries: list of queries either objects of type Query or
                  XML strings.
         message_type: perfSONAR message types, possible values are
                       defined in Message
-        parse_results: If False return raw XML string
         """
         if not isinstance(queries, list):
             raise ValueError("queries should be a list.")
@@ -63,7 +60,28 @@ class ServiceClient(object):
             else:
                 data.append(objs['data'])
 
-        xml = Message(meta, data, message_type=message_type).to_xml()
+        return Message(meta, data, message_type=message_type)
+    
+    def aggregate_query(self, queries, \
+                        message_type=Message.SETUP_DATA_REQUEST, \
+                        parse_result=True):
+        """
+        Send multiple queries to the same service to save round trip
+        time.
+
+        Arguments:
+        queries: list of queries either objects of type Query or
+                 XML strings.
+        message_type: perfSONAR message types, possible values are
+                      defined in Message
+        parse_results: If False return raw XML string
+        """
+        if not isinstance(queries, list):
+            raise ValueError("queries should be a list.")
+
+        message = self.make_aggregate_query(queries, message_type)
+        xml = message.to_xml()
+        
         result = self.soap_client.send_request(xml, parse=parse_result)
 
         if parse_result is True:

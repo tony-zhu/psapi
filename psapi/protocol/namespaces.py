@@ -31,6 +31,7 @@ NMWGTOPO3 = 'http://ggf.org/ns/nmwg/topology/base/3.0/'
 SNMP = "http://ggf.org/ns/nmwg/tools/snmp/2.0/" 
 NETERR = "http://ggf.org/ns/nmwg/characteristic/errors/2.0/"
 NETDISC = "http://ggf.org/ns/nmwg/characteristic/discards/2.0/"
+GANGLIA = "http://ggf.org/ns/nmwg/tools/ganglia/2.0/"
  
 # namespaces map to make the generated XML prettier!
 nsmap = {}
@@ -52,8 +53,9 @@ nsmap['owamp'] = OWAMP
 nsmap['traceroute'] = TRACEROUTE
 nsmap['xquery'] = XQUERY 
 nsmap['pinger'] = PINGER
-nsmap['nmwgtopo3'] = NMWGTOPO3
+nsmap['nmwgt3'] = NMWGTOPO3
 nsmap['snmp'] = SNMP
 nsmap['neterr'] = NETERR
 nsmap['netdisc'] = NETDISC
+nsmap['ganglia'] = GANGLIA
 

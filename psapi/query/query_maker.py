@@ -69,6 +69,12 @@ def make_lookup_query(**args):
     query = LookupQuery.make_lookup_query(**args)
     return query
 
+def make_ganglia_query(**args):
+    """Make Ganglia MA query."""
+    from psapi.query import GangliaQuery
+    query = GangliaQuery.make_ganglia_query(**args)
+    return query
+
 def make_query(event_type, **args):
     """
     Return results from the appropriate query maker based on the event

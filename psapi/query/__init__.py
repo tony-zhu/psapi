@@ -6,3 +6,4 @@ from psapi.query.owampquery import OWAMPQuery
 from psapi.query.traceroutequery import TracerouteQuery
 from psapi.query.echorequest import EchoRequest
 from psapi.query.xquery import XQuery
+from psapi.query.gangliaquery import GangliaQuery

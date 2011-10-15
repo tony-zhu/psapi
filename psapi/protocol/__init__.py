@@ -17,6 +17,7 @@ from psapi.protocol.snmpsubject import SNMPSubject
 from psapi.protocol.netdiscardsubject import NetDiscardSubject
 from psapi.protocol.neterrorsubject import NetErrorSubject
 from psapi.protocol.netutilsubject import NetUtilSubject
+from psapi.protocol.gangliasubject import GangliaSubject
 from psapi.protocol.key import Key
 from psapi.protocol.metadata import Metadata
 from psapi.protocol.psdatum import PsDatum
@@ -31,6 +32,7 @@ from psapi.protocol.xquerysubject import XQuerySubject
 from psapi.protocol.xqueryparameters import XQueryParameters
 from psapi.protocol.pingersubject import PingerSubject
 from psapi.protocol.pingerparameters import PingerParameters
+from psapi.protocol.node import Node
 
 
 # Runtime objects registerations for each namespace
@@ -85,3 +87,5 @@ register_namespace('{%s}address' % ns.NMTB, Address)
 register_namespace('{%s}service' % ns.PSSERVICE, PsService)
 register_namespace('{%s}datum' % ns.PSSERVICE, PsDatum)
 register_namespace('{%s}service' % ns.NMB, NMBService)
+register_namespace('{%s}subject' % ns.GANGLIA, GangliaSubject)
+register_namespace('{%s}NMWGTOPO3' % ns.GANGLIA, Node)

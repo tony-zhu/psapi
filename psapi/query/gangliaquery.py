@@ -91,7 +91,7 @@ class GangliaQuery(Query):
             data_filter['consolidationFunction'] = self.consolidation_function
         
         if self.resolution is not None:
-            data_filter['protocol'] = self.resolution
+            data_filter['resolution'] = self.resolution
         
         if self.start_time is not None:
             data_filter['startTime'] = self.start_time

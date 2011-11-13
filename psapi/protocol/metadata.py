@@ -103,8 +103,17 @@ class Metadata(PsObject):
             if hasattr(itr, 'to_xml'):
                 itr.to_xml(tree, False)
             else:
-                event = etree.SubElement(tree, '{%s}eventType' % ns.NMWG)
-                event.text = itr
+                # This a hack to get arround MA accepts events with slashes or without slashes
+                if itr[-1] == '/':
+                    event = etree.SubElement(tree, '{%s}eventType' % ns.NMWG)
+                    event.text = itr
+                    event = etree.SubElement(tree, '{%s}eventType' % ns.NMWG)
+                    event.text = itr[:-1]
+                else:
+                    event = etree.SubElement(tree, '{%s}eventType' % ns.NMWG)
+                    event.text = itr
+                    event = etree.SubElement(tree, '{%s}eventType' % ns.NMWG)
+                    event.text = itr + '/'
 
         # Parameters
         if hasattr(self.parameters, 'to_xml'):

@@ -25,21 +25,33 @@ c = ServiceClient(url)
 # This purely using python objects and needs min knowldge of the 
 # perfSONAR protocol because all params are part of the constructor
 
-endpointpair = EndPointPair(src= '198.124.252.117', dst='198.129.254.46')
+# To query for specific (src, dst) pair
+endpointpair = EndPointPair(src='pnwg-pt1.es.net', dst='ga-pt1.es.net') 
+
+# To query for everything
+#endpointpair = EndPointPair()
+
 query = IPerfQuery(endpointpair=endpointpair, protocol='TCP',
             time_duration=20, \
             start_time=int(time.time())-100000, \
             end_time=int(time.time()))
 
-
 r = c.query(query)
 
 #read the metadata
-print r.meta
+if isinstance(r.meta, dict):
+    for metaKey in r.meta:
+        meta = r.meta[metaKey]
+        data = r.data[metaKey]
+        print ""
+        print "IPERF data for: src=%s dst=%s" % (meta.subject.src, meta.subject.dst)
+        if isinstance(data, list):
+            for datum in data:
+                print datum
+        else:
+            print data
 
-# read the data
-print r.data
-
+        
 
 #####################################
 # This method allows the user to add any parameter or filter
@@ -51,11 +63,15 @@ params = {'protocol':'TCP', 'timeDuration':'20'}
 select={'filter_type':'select', 'startTime':int(time.time())-100000, 'endTime':int(time.time())}
 
 # everything but event type is optional!
-q = Query(events.IPERF2, params=params, src= '198.124.252.117', dst='198.129.254.46', data_filter=select)
+q = Query(events.IPERF2, params=params, src='pnwg-pt1.es.net', dst='ga-pt1.es.net', data_filter=select)
 r = c.query(q)
 
 #read the metadata
-print r.meta
+if isinstance(r.meta, list):
+    for meta in r.meta:
+        print meta
+else:
+    print r.meta
 
 # read the data
 print r.data
@@ -71,10 +87,10 @@ params = {'protocol':'TCP', 'timeDuration':'20'}
 # Only filter_type is mandotary, the rest can be any key/value pairs
 select={'filter_type':'select', 'startTime':int(time.time())-100000, 'endTime':int(time.time())}
 
-q1 = Query(events.IPERF2, params=params, src= '198.129.254.122', dst='198.129.254.46', data_filter=select)
-q2 = Query(events.IPERF2, params=params, src= '198.124.252.117', dst='198.129.254.46', data_filter=select)
-q3 = Query(events.IPERF2, params=params, src= '198.129.254.46', dst='198.124.252.141', data_filter=select)
-q4 = Query(events.IPERF2, params=params, src= '198.129.254.46', dst='198.129.254.134', data_filter=select)
+q1 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='ga-pt1.es.net', data_filter=select)
+q2 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='llnl-pt1.es.net', data_filter=select)
+q3 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='nersc-pt1.es.net', data_filter=select)
+q4 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='chic-pt1.es.net', data_filter=select)
 
 r = c.aggregate_query([q1, q2, q3, q4])
 

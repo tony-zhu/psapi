@@ -27,5 +27,6 @@ for $metadata in /nmwg:store[@type="LSStore"]/nmwg:metadata
 xquery = XQuery(query_text)
 r = c.query(xquery)
 
-for service in r.data:
-    print service.subject.accessPoint 
+for metaKey in r.meta:
+    for service in r.data[metaKey]:
+        print service.subject.accessPoint 

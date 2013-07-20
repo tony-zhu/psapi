@@ -71,7 +71,7 @@ def get_address_type(address):
         # TODO Need better check for toplevel domain names
         address_len = len(address)
         if address[address_len-3] == '.' or address[address_len-4] == '.': 
-            return 'dns'
+            return None #'dns' not really used often
         else:
             return 'hostname'
     else:

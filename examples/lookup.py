@@ -22,5 +22,7 @@ gls_query = LookupQuery([src, dst], events.IPERF2)
 
 r = c.query(gls_query)
 
-for result in r.data:
-    print result.accessPoint
+for meta in r.meta:
+    for result in r.data[meta]:
+        print result.accessPoint
+

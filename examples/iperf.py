@@ -1,8 +1,10 @@
 """
 Sample Run of PsAPI Client to collect iperf data
 """
+import calendar
 
 import time
+import datetime
 from psapi.client import ServiceClient
 from psapi.query import Query
 from psapi.query import IPerfQuery
@@ -15,7 +17,7 @@ from psapi.protocol import events
 ################################
 
 # Service access point
-url = 'http://pnwg-pt1.es.net:8085/perfSONAR_PS/services/pSB'
+url = 'http://bandwidth.cs.utah.edu:8085/perfSONAR_PS/services/pSB'
 c = ServiceClient(url)
 
 ################################
@@ -26,15 +28,16 @@ c = ServiceClient(url)
 # perfSONAR protocol because all params are part of the constructor
 
 # To query for specific (src, dst) pair
-endpointpair = EndPointPair(src='pnwg-pt1.es.net', dst='ga-pt1.es.net') 
+endpointpair = EndPointPair(src='bandwidth.cs.utah.edu', dst='bandwidth.chpc.utah.edu')
 
 # To query for everything
 #endpointpair = EndPointPair()
 
 query = IPerfQuery(endpointpair=endpointpair, protocol='TCP',
-            time_duration=20, \
-            start_time=int(time.time())-100000, \
-            end_time=int(time.time()))
+                  start_time=calendar.timegm(
+                        datetime.datetime(2013,11,14,3,30,15).utctimetuple()),
+                  end_time=calendar.timegm(
+                       datetime.datetime(2013,12,15,15,30,50).utctimetuple()))
 
 r = c.query(query)
 

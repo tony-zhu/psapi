@@ -15,8 +15,7 @@ from psapi.protocol import events
 ################################
 
 # Service access point
-#url = 'http://192.111.110.34:8085/perfSONAR_PS/services/pSB'
-url = 'http://bandwidth.cs.utah.edu:8085/perfSONAR_PS/services/pSB'
+url = 'http://fnal-pt1.es.net:8085/perfSONAR_PS/services/pSB'
 c = ServiceClient(url)
 
 

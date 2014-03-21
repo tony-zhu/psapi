@@ -1,0 +1,49 @@
+# IDE Files #
+############
+.idea/
+
+# Some third-party Libs #
+helpdesk
+psapi
+
+# Django Files #
+###############
+*settings.py
+wsgi.py
+
+# Generated Docs #
+##################
+doc/_build
+reports
+
+# RAS keys #
+############
+cis/cis_rsa
+cis/cis_rsa.pub
+
+# Scheduler Results #
+####################
+external_scripts/scheduler/conf/schedule_in.conf
+external_scripts/scheduler/conf/schedule_out.csv
+
+# Compiled source #
+###################
+*.pyc
+*.py~
+
+# Logs and databases #
+######################
+*.log
+*.db
+*.db-journal
+*.ini
+logs/*
+cache/*
+
+# OS generated files #
+######################
+.DS_Store?
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db

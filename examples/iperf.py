@@ -24,7 +24,7 @@ c = ServiceClient(url)
 # making a single query
 ################################
 
-# This purely using python objects and needs min knowldge of the 
+# This purely using python objects and needs min knowledge of the
 # perfSONAR protocol because all params are part of the constructor
 
 # To query for specific (src, dst) pair
@@ -34,10 +34,10 @@ endpointpair = EndPointPair(src='bandwidth.cs.utah.edu', dst='bandwidth.chpc.uta
 #endpointpair = EndPointPair()
 
 query = IPerfQuery(endpointpair=endpointpair, protocol='TCP',
-                  start_time=calendar.timegm(
-                        datetime.datetime(2013,11,14,3,30,15).utctimetuple()),
-                  end_time=calendar.timegm(
-                       datetime.datetime(2013,12,15,15,30,50).utctimetuple()))
+                   start_time=calendar.timegm(
+                       datetime.datetime(2013, 11, 14, 3, 30, 15).utctimetuple()),
+                   end_time=calendar.timegm(
+                       datetime.datetime(2013, 12, 15, 15, 30, 50).utctimetuple()))
 
 r = c.query(query)
 
@@ -54,16 +54,16 @@ if isinstance(r.meta, dict):
         else:
             print data
 
-        
+
 
 #####################################
 # This method allows the user to add any parameter or filter
 #####################################
-# Any key/value pairs paramters can go here
-params = {'protocol':'TCP', 'timeDuration':'20'}
+# Any key/value pairs parameters can go here
+params = {'protocol': 'TCP', 'timeDuration': '20'}
 
 # Only filter_type is mandotary, the rest can be any key/value pairs
-select={'filter_type':'select', 'startTime':int(time.time())-100000, 'endTime':int(time.time())}
+select = {'filter_type': 'select', 'startTime': int(time.time()) - 100000, 'endTime': int(time.time())}
 
 # everything but event type is optional!
 q = Query(events.IPERF2, params=params, src='pnwg-pt1.es.net', dst='ga-pt1.es.net', data_filter=select)
@@ -84,16 +84,16 @@ print r.data
 #This is example of sending multiple queries to the same service
 ################################################################
 
-# Any key/value pairs paramters can go here
-params = {'protocol':'TCP', 'timeDuration':'20'}
+# Any key/value pairs parameters can go here
+params = {'protocol': 'TCP', 'timeDuration': '20'}
 
-# Only filter_type is mandotary, the rest can be any key/value pairs
-select={'filter_type':'select', 'startTime':int(time.time())-100000, 'endTime':int(time.time())}
+# Only filter_type is mandatory, the rest can be any key/value pairs
+select = {'filter_type': 'select', 'startTime': int(time.time()) - 100000, 'endTime': int(time.time())}
 
-q1 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='ga-pt1.es.net', data_filter=select)
-q2 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='llnl-pt1.es.net', data_filter=select)
-q3 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='nersc-pt1.es.net', data_filter=select)
-q4 = Query(events.IPERF2, params=params, src= 'pnwg-pt1.es.net', dst='chic-pt1.es.net', data_filter=select)
+q1 = Query(events.IPERF2, params=params, src='pnwg-pt1.es.net', dst='ga-pt1.es.net', data_filter=select)
+q2 = Query(events.IPERF2, params=params, src='pnwg-pt1.es.net', dst='llnl-pt1.es.net', data_filter=select)
+q3 = Query(events.IPERF2, params=params, src='pnwg-pt1.es.net', dst='nersc-pt1.es.net', data_filter=select)
+q4 = Query(events.IPERF2, params=params, src='pnwg-pt1.es.net', dst='chic-pt1.es.net', data_filter=select)
 
 r = c.aggregate_query([q1, q2, q3, q4])
 
@@ -104,14 +104,14 @@ for key, value in r.meta.iteritems():
     print "\n"
 
 ################################################################
-#This is example reteriving all endpoints
+#This is example retrieving all endpoints
 ################################################################
 
-# Any key/value pairs paramters can go here
-params = {'protocol':'TCP', 'timeDuration':'20'}
+# Any key/value pairs parameters can go here
+params = {'protocol': 'TCP', 'timeDuration': '20'}
 
-# Only filter_type is mandotary, the rest can be any key/value pairs
-select={'filter_type':'select', 'startTime':int(time.time())-100000, 'endTime':int(time.time())}
+# Only filter_type is mandatory, the rest can be any key/value pairs
+select = {'filter_type': 'select', 'startTime': int(time.time()) - 100000, 'endTime': int(time.time())}
 
 q = Query(events.IPERF2, params=params, data_filter=select)
 r = c.query(q)
